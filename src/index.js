@@ -38,19 +38,25 @@ let server;
 
 (async () => {
   app.use(cors());
+
+  // set up context
+  app.use((req, res, next) => {
+    // user authentication could be done here
+
+    req.datasources = {
+      openformat: openformatDS,
+      recommendations: recommendationsDS,
+      idmapper: idmapperDS,
+      moreinfo: moreinfoDS
+    };
+    next();
+  });
+
   app.use(
     '/graphql',
     graphqlHTTP({
       schema: await schema(),
-      graphiql: true,
-      context: {
-        datasources: {
-          openformat: openformatDS,
-          recommendations: recommendationsDS,
-          idmapper: idmapperDS,
-          moreinfo: moreinfoDS
-        }
-      }
+      graphiql: true
     })
   );
   server = app.listen(port);
