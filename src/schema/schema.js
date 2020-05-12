@@ -1,4 +1,4 @@
-import {makeExecutableSchema} from 'graphql-tools';
+import {makeExecutableSchema, mergeSchemas} from 'graphql-tools';
 import {
   typeDef as Manifestation,
   resolvers as ManifestationResolvers
@@ -17,8 +17,9 @@ import {
   resolvers as AdminDataResolvers
 } from './admindata';
 import {typeDef as Cover, resolvers as CoverResolvers} from './cover';
+import drupalSchema from './external/drupal';
 
-const schema = makeExecutableSchema({
+const internalSchema = makeExecutableSchema({
   typeDefs: [
     `type Query {
       manifestation(pid: String!): Manifestation!
@@ -45,4 +46,8 @@ const schema = makeExecutableSchema({
   }
 });
 
-export default schema;
+export default async () => {
+  return mergeSchemas({
+    subschemas: [{schema: await drupalSchema()}, {schema: internalSchema}]
+  });
+};

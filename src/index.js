@@ -32,27 +32,32 @@ import moreinfoDS from './datasources/moreinfo';
 import express from 'express';
 import cors from 'cors';
 import graphqlHTTP from 'express-graphql';
-
 const port = process.env.PORT || 3000;
 const app = express();
-app.use(cors());
-app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema,
-    graphiql: true,
-    context: {
-      datasources: {
-        openformat: openformatDS,
-        recommendations: recommendationsDS,
-        idmapper: idmapperDS,
-        moreinfo: moreinfoDS
+let server;
+
+(async () => {
+  app.use(cors());
+  app.use(
+    '/graphql',
+    graphqlHTTP({
+      schema: await schema(),
+      graphiql: true,
+      context: {
+        datasources: {
+          openformat: openformatDS,
+          recommendations: recommendationsDS,
+          idmapper: idmapperDS,
+          moreinfo: moreinfoDS
+        }
       }
-    }
-  })
-);
-const server = app.listen(port);
-console.log(`Running a GraphQL API server at http://localhost:${port}/graphql`);
+    })
+  );
+  server = app.listen(port);
+  console.log(
+    `Running a GraphQL API server at http://localhost:${port}/graphql`
+  );
+})();
 
 const signals = {
   SIGINT: 2,
