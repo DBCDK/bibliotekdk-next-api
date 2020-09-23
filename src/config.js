@@ -10,7 +10,7 @@ export default {
       url:
         process.env.WORKSERVICE_URL ||
         "http://work-presentation-service.cisterne.svc.cloud.dbc.dk/api/work-presentation",
-      agencyId: process.env.WORKSERVICE_AGENCY_ID || "775100",
+      agencyId: process.env.WORKSERVICE_AGENCY_ID || "190101",
       profile: process.env.WORKSERVICE_PROFILE || "opac"
     }
   }

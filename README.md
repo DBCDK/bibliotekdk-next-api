@@ -13,7 +13,7 @@ The development environment may be set up using npm.
 ## Environment Variables
 The following environment variables can be set in the application
 - **PORT**
-Port on which Next.js runs. Default is 3000.
+Port on which the server runs. Default is 3000.
 - **MOREINFO_URL**
 URL on which moreinfo runs.
 - **MOREINFO_USER**

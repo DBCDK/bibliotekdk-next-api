@@ -12,7 +12,7 @@ async function fetchWork({ workId }) {
   return (
     await request.get(url).query({
       workId,
-      trackingId: "bibdk-api",
+      // trackingId: 'bibdk-api', this should be dynamic, and be generated per graphql request
       agencyId,
       profile
     })
