@@ -53,9 +53,7 @@ export const internalSchema = makeExecutableSchema({
         return { pid: args.pid };
       },
       async work(parent, args, context, info) {
-        const { work } = await context.datasources.workservice.get({
-          workId: args.id
-        });
+        const { work } = await context.datasources.workservice.load(args.id);
         return { ...work, id: args.id };
       }
     },

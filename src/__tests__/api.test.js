@@ -175,7 +175,7 @@ describe("API test cases", () => {
       context: {
         datasources: {
           workservice: {
-            get: () => {
+            load: () => {
               throw new Error("Not Found");
             }
           }
