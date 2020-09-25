@@ -36,13 +36,13 @@ The group.
 - **MOREINFO_PASSWORD**
 The group.
 - **MOREINFO_TIME_TO_LIVE_SECONDS**
-Time time for data to live in the Redis cache in seconds. Default is 86400.
+Time for data to live in the Redis cache in seconds. Default is 86400.
 - **MOREINFO_PREFIX**
 The prefix to be used for keys in the Redis cache. This may be changed to invalidate entries. Default is moreinfo-1. 
 - **OPENFORMAT_URL**
 The workservice URL. Default is http://openformat-php-master.frontend-prod.svc.cloud.dbc.dk/server.php
 - **OPENFORMAT_TIME_TO_LIVE_SECONDS**
-Time time for data to live in the Redis cache in seconds. Default is 86400.
+Time for data to live in the Redis cache in seconds. Default is 86400.
 - **OPENFORMAT_PREFIX**
 The prefix to be used for keys in the Redis cache. This may be changed to invalidate entries. Default is openformat-1. 
 - **REDIS_HOST**
@@ -60,6 +60,6 @@ The agency id
 - **WORKSERVICE_PROFILE**
 The profile
 - **WORKSERVICE_TIME_TO_LIVE_SECONDS**
-Time time for data to live in the Redis cache in seconds. Default is 86400.
+Time for data to live in the Redis cache in seconds. Default is 86400.
 - **WORKSERVICE_PREFIX**
 The prefix to be used for keys in the Redis cache. This may be changed to invalidate entries. Default is workservice-1. 
