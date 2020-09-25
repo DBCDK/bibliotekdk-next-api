@@ -19,7 +19,10 @@ const app = express();
 let server;
 
 (async () => {
-  if (config.datasources.redis.enabled) {
+  if (
+    config.datasources.redis.enabled === true ||
+    config.datasources.redis.enabled === "true"
+  ) {
     connectRedis({
       host: config.datasources.redis.host,
       port: config.datasources.redis.port,
