@@ -13,7 +13,7 @@ The development environment may be set up using npm.
 ## Notes on performance
 A single query to the API typically leads to requests being sent to several underlying data sources. This is perfectly fine, and one of the strengths of GraphQL. But if data loading is not handled properly it results in an excessive number of network request round-trips.
 
-We use [Facebooks' DataLoader library](https://github.com/graphql/dataloader) and a Redis cache for mitigating these challenges.
+We use [DataLoader library](https://github.com/graphql/dataloader) (a port of Facebooks "Loader" API) and a Redis cache for mitigating these challenges.
 
 - **Per request caching (DataLoader)**
 DataLoader has a builtin memory cache, preventing multiple requests for the same resource from happening in the same GraphQL request.
