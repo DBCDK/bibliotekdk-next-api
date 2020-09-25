@@ -189,7 +189,9 @@ describe("API test cases", () => {
           path: ["work"]
         }
       ],
-      data: null
+      data: {
+        work: null
+      }
     });
   });
 

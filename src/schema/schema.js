@@ -34,7 +34,7 @@ export const internalSchema = makeExecutableSchema({
   typeDefs: [
     `type Query {
       manifestation(pid: String!): Manifestation!
-      work(id: String!): Work!
+      work(id: String!): Work
     }`,
     Work,
     ManifestationPreview,

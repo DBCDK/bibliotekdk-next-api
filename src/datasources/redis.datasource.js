@@ -1,9 +1,20 @@
 import { log } from "dbc-node-logger";
 import redis from "redis";
 
+// Redis client
 let client;
-let isUp = false;
 
+// Variable indicating if we are connected
+let isConnected = false;
+
+/**
+ * Connect to a Redis server and create event handlers
+ *
+ * @param {Object} params The params object
+ * @param {string} params.host The Redis host
+ * @param {number|string} params.port The Redis port
+ * @param {string} params.prefix The Redis prefix
+ */
 export function connectRedis({ host, port, prefix }) {
   log.info(`Connecting to Redis`, {
     redisHost: host,
@@ -18,7 +29,7 @@ export function connectRedis({ host, port, prefix }) {
   });
 
   client.on("connect", function() {
-    isUp = true;
+    isConnected = true;
     log.info(`Connected to Redis`, {
       redisHost: host,
       redisPort: port,
@@ -27,7 +38,7 @@ export function connectRedis({ host, port, prefix }) {
   });
 
   client.on("end", function() {
-    isUp = false;
+    isConnected = false;
     log.error(`Disconnected from Redis`, {
       redisHost: host,
       redisPort: port,
@@ -36,15 +47,29 @@ export function connectRedis({ host, port, prefix }) {
   });
 
   client.on("error", function(error) {
-    if (isUp) {
-      console.error(error);
+    // Only log when connected to Redis,
+    // otherwise we get spammed
+    if (isConnected) {
+      log.error(`Some Redis error occured: ${error.message}`, {
+        redisHost: host,
+        redisPort: port,
+        redisPrefix: prefix
+      });
     }
   });
 }
 
+/**
+ * Wrap the Redis mget function in a Promise.
+ * The promise will always resolve - never reject.
+ * In case of failure, we log and move on,
+ * keys will be fetched from data source.
+ *
+ * @param {string} keys The keys to fetch
+ */
 async function mget(keys) {
   return new Promise(resolve => {
-    if (isUp) {
+    if (isConnected) {
       client.mget(keys, (error, result) => {
         if (error) {
           log.error(`Redis mget failed`, {
@@ -54,19 +79,30 @@ async function mget(keys) {
           // to let the requests pass through
           resolve(keys.map(() => null));
         } else {
-          resolve(result);
+          resolve(result.map(val => JSON.parse(val)));
         }
       });
     } else {
+      // Return array filled with null values,
+      // to let the requests pass through
       resolve(keys.map(() => null));
     }
   });
 }
 
+/**
+ * Wrap the Redis setex function in a Promise.
+ * The promise will always resolve - never reject.
+ * In case of failure, we log and move on.
+ *
+ * @param {string} key The key
+ * @param {number} seconds Time to live in seconds
+ * @param {Object} val The value to store
+ */
 async function setex(key, seconds, val) {
   return new Promise(resolve => {
-    if (isUp) {
-      client.setex(key, seconds, val, (error, result) => {
+    if (isConnected) {
+      client.setex(key, seconds, JSON.stringify(val), (error, result) => {
         if (error) {
           log.error(`Redis setex failed`, {
             key,
@@ -134,17 +170,20 @@ export function withRedis(
       // Store those missing values in Redis with expiration time set to ttl
       // We do not await here
       missingKeys.forEach((key, idx) => {
-        return setexFunc(`${prefix}_${key}`, ttl, JSON.stringify(values[idx]));
+        if (!(values[idx] instanceof Error)) {
+          return setexFunc(`${prefix}_${key}`, ttl, values[idx]);
+        }
       });
     }
 
     // Return array of values
-    return keys.map((key, idx) => {
+    const res = keys.map((key, idx) => {
       if (cachedValues[idx]) {
-        return JSON.parse(cachedValues[idx]);
+        return cachedValues[idx];
       }
       return values.shift();
     });
+    return res;
   }
 
   return redisBatchLoader;

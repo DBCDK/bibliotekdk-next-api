@@ -1,3 +1,4 @@
+import { log } from "dbc-node-logger";
 import request from "superagent";
 import config from "../config";
 import { withRedis } from "./redis.datasource";
@@ -27,7 +28,19 @@ async function fetchWork({ workId }) {
  */
 async function batchLoader(keys) {
   return await Promise.all(
-    keys.map(async key => await fetchWork({ workId: key }))
+    keys.map(async key => {
+      try {
+        return await fetchWork({ workId: key });
+      } catch (e) {
+        // We return error instead of throwing,
+        // se we don't fail entire Promise.all
+        // DataLoader will make sure its thrown in a resolver
+        if (e.status !== 404) {
+          log.error("Fetch work failed", { id: key, reason: e.message });
+        }
+        return e;
+      }
+    })
   );
 }
 
