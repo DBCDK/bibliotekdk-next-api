@@ -25,7 +25,12 @@ export function connectRedis({ host, port, prefix }) {
     host,
     port,
     enable_offline_queue: false,
-    prefix
+    prefix,
+    retry_strategy: function(options) {
+      // We retry forever
+      // Wait at most 5000 ms between each retry
+      return Math.min(options.attempt * 100, 5000);
+    }
   });
 
   client.on("connect", function() {
