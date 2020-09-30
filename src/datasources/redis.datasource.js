@@ -1,5 +1,6 @@
 import { log } from "dbc-node-logger";
 import Redis from "ioredis";
+import config from "../config";
 
 // Redis client
 let redis;
@@ -15,7 +16,7 @@ let isConnected = false;
  * @param {number|string} params.port The Redis port
  * @param {string} params.prefix The Redis prefix
  */
-export function connectRedis({ host, port, prefix }) {
+function connectRedis({ host, port, prefix }) {
   log.info(`Connecting to Redis`, {
     redisHost: host,
     redisPort: port,
@@ -172,4 +173,16 @@ export function withRedis(
   }
 
   return redisBatchLoader;
+}
+
+// Connect if Redis is enabled
+if (
+  config.datasources.redis.enabled === true ||
+  config.datasources.redis.enabled === "true"
+) {
+  connectRedis({
+    host: config.datasources.redis.host,
+    port: config.datasources.redis.port,
+    prefix: config.datasources.redis.prefix
+  });
 }

@@ -13,23 +13,11 @@ import express from "express";
 import cors from "cors";
 import graphqlHTTP from "express-graphql";
 import DataLoader from "dataloader";
-import { connectRedis } from "./datasources/redis.datasource";
 import config from "./config";
 const app = express();
 let server;
 
 (async () => {
-  if (
-    config.datasources.redis.enabled === true ||
-    config.datasources.redis.enabled === "true"
-  ) {
-    connectRedis({
-      host: config.datasources.redis.host,
-      port: config.datasources.redis.port,
-      prefix: config.datasources.redis.prefix
-    });
-  }
-
   app.use(cors());
 
   // set up context per request
