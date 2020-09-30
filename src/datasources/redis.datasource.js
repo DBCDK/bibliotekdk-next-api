@@ -1,8 +1,8 @@
 import { log } from "dbc-node-logger";
-import redis from "redis";
+import Redis from "ioredis";
 
 // Redis client
-let client;
+let redis;
 
 // Variable indicating if we are connected
 let isConnected = false;
@@ -21,19 +21,9 @@ export function connectRedis({ host, port, prefix }) {
     redisPort: port,
     redisPrefix: prefix
   });
-  client = redis.createClient({
-    host,
-    port,
-    enable_offline_queue: false,
-    prefix,
-    retry_strategy: function(options) {
-      // We retry forever
-      // Wait at most 5000 ms between each retry
-      return Math.min(options.attempt * 100, 5000);
-    }
-  });
+  redis = new Redis.Cluster([{ host, port }], { keyPrefix: prefix });
 
-  client.on("connect", function() {
+  redis.on("ready", function() {
     isConnected = true;
     log.info(`Connected to Redis`, {
       redisHost: host,
@@ -42,7 +32,10 @@ export function connectRedis({ host, port, prefix }) {
     });
   });
 
-  client.on("end", function() {
+  redis.on("close", function() {
+    if (!isConnected) {
+      return;
+    }
     isConnected = false;
     log.error(`Disconnected from Redis`, {
       redisHost: host,
@@ -51,48 +44,41 @@ export function connectRedis({ host, port, prefix }) {
     });
   });
 
-  client.on("error", function(error) {
-    // Only log when connected to Redis,
-    // otherwise we get spammed
-    if (isConnected) {
-      log.error(`Some Redis error occured: ${error.message}`, {
-        redisHost: host,
-        redisPort: port,
-        redisPrefix: prefix
-      });
+  redis.on("error", function() {
+    if (!isConnected) {
+      return;
     }
+    log.error(`Some Redis error occured: ${error.message}`, {
+      redisHost: host,
+      redisPort: port,
+      redisPrefix: prefix
+    });
   });
 }
 
 /**
- * Wrap the Redis mget function in a Promise.
- * The promise will always resolve - never reject.
- * In case of failure, we log and move on,
- * keys will be fetched from data source.
+ * mget does not work when Redis is running in a cluster
+ * and keys are on different nodes.
+ * Therefore, we must call get per key.
  *
  * @param {string} keys The keys to fetch
  */
 async function mget(keys) {
-  return new Promise(resolve => {
-    if (isConnected) {
-      client.mget(keys, (error, result) => {
-        if (error) {
-          log.error(`Redis mget failed`, {
-            keys
-          });
-          // Return array filled with null values,
-          // to let the requests pass through
-          resolve(keys.map(() => null));
-        } else {
-          resolve(result.map(val => JSON.parse(val)));
-        }
-      });
-    } else {
-      // Return array filled with null values,
-      // to let the requests pass through
-      resolve(keys.map(() => null));
-    }
-  });
+  if (!isConnected) {
+    return keys.map(() => null);
+  }
+  return Promise.all(
+    keys.map(async key => {
+      try {
+        return JSON.parse(await redis.get(key));
+      } catch (e) {
+        log.error(`Redis get failed`, {
+          key
+        });
+        return null;
+      }
+    })
+  );
 }
 
 /**
@@ -105,24 +91,18 @@ async function mget(keys) {
  * @param {Object} val The value to store
  */
 async function setex(key, seconds, val) {
-  return new Promise(resolve => {
-    if (isConnected) {
-      client.setex(key, seconds, JSON.stringify(val), (error, result) => {
-        if (error) {
-          log.error(`Redis setex failed`, {
-            key,
-            val,
-            seconds
-          });
-          resolve();
-        } else {
-          resolve(result);
-        }
-      });
-    } else {
-      resolve();
-    }
-  });
+  if (!isConnected) {
+    return;
+  }
+  try {
+    await redis.set(key, JSON.stringify(val), "ex", seconds);
+  } catch (e) {
+    log.error(`Redis setex failed`, {
+      key,
+      val,
+      seconds
+    });
+  }
 }
 
 /**
