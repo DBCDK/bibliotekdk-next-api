@@ -25,7 +25,7 @@ export const find = async ({ pid, limit = 10 }) => {
  * @param {Array.<string>} keys The keys to fetch
  */
 async function batchLoader(keys) {
-  return await Promise.all(keys.map(async key => await find({ pid: key })));
+  return await Promise.all(keys.map(async key => await find(key)));
 }
 
 /**

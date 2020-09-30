@@ -26,7 +26,11 @@ let server;
 
     req.datasources = {
       openformat: new DataLoader(openformatLoader),
-      recommendations: new DataLoader(recommendationsLoader),
+      recommendations: new DataLoader(recommendationsLoader, {
+        // the key of recommendation batchloader is an object
+        // hence we stringify
+        cacheKeyFn: key => JSON.stringify(key)
+      }),
       idmapper: new DataLoader(idmapperLoader),
       moreinfo: new DataLoader(moreinfoLoader),
       workservice: new DataLoader(workLoader)

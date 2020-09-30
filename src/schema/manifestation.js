@@ -137,9 +137,10 @@ export const resolvers = {
     physicalDescription: getStringArray,
     publication: getStringArray,
     async recommendations(parent, args, context, info) {
-      const recommendations = await context.datasources.recommendations.load(
-        parent.pid
-      );
+      const recommendations = await context.datasources.recommendations.load({
+        pid: parent.pid,
+        limit: args.limit
+      });
       return recommendations.response;
     },
     related: getStringArray,

@@ -106,6 +106,13 @@ async function setex(key, seconds, val) {
   }
 }
 
+function createPrefixedKey(prefix, key) {
+  if (typeof key === "object") {
+    return `${prefix}_${JSON.stringify(key)}`;
+  }
+  return `${prefix}_${key}`;
+}
+
 /**
  * A higher order function, that makes it easy to enhance
  * a batch loader with Redis caching capabilities.
@@ -134,7 +141,7 @@ export function withRedis(
    */
   async function redisBatchLoader(keys) {
     // Create array of prefixed keys
-    const prefixedKeys = keys.map(key => `${prefix}_${key}`);
+    const prefixedKeys = keys.map(key => createPrefixedKey(prefix, key));
 
     // Get values of all prefixed keys from Redis
     const cachedValues = await mgetFunc(prefixedKeys);
@@ -157,7 +164,7 @@ export function withRedis(
       // We do not await here
       missingKeys.forEach((key, idx) => {
         if (!(values[idx] instanceof Error)) {
-          return setexFunc(`${prefix}_${key}`, ttl, values[idx]);
+          return setexFunc(createPrefixedKey(prefix, key), ttl, values[idx]);
         }
       });
     }
