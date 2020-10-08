@@ -1,7 +1,6 @@
 /**
  * @file Subject type definition and resolvers
  *
- * Resolves responses from moreinfo
  */
 
 /**
