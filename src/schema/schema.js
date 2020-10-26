@@ -1,9 +1,9 @@
 import { makeExecutableSchema, mergeSchemas } from "graphql-tools";
 
 import {
-  typeDef as ManifestationPreview,
-  resolvers as ManifestationPreviewResolvers
-} from "./manifestationpreview";
+  typeDef as WorkManifestation,
+  resolvers as WorkManifestationResolvers
+} from "./workmanifestation";
 import { typeDef as Work, resolvers as WorkResolvers } from "./work";
 import {
   typeDef as Manifestation,
@@ -34,11 +34,11 @@ import drupalSchema from "./external/drupal";
 export const internalSchema = makeExecutableSchema({
   typeDefs: [
     `type Query {
-      manifestation(pid: String!): Manifestation!
+      manifestation(pid: String!): WorkManifestation!
       work(id: String!): Work
     }`,
     Work,
-    ManifestationPreview,
+    WorkManifestation,
     Manifestation,
     Recommendation,
     Review,
@@ -52,14 +52,14 @@ export const internalSchema = makeExecutableSchema({
   resolvers: {
     Query: {
       manifestation(parent, args, context, info) {
-        return { pid: args.pid };
+        return { id: args.pid };
       },
       async work(parent, args, context, info) {
         const { work } = await context.datasources.workservice.load(args.id);
         return { ...work, id: args.id };
       }
     },
-    ...ManifestationPreviewResolvers,
+    ...WorkManifestationResolvers,
     ...WorkResolvers,
     ...ManifestationResolvers,
     ...RecommendationResolvers,

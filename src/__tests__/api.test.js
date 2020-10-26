@@ -24,42 +24,62 @@
 import { graphql } from "graphql";
 import { internalSchema } from "../schema/schema";
 import mockedWorkDataSource from "../datasources/mocked/work.datasource.mocked";
+import mockedOpenformat from "../datasources/mocked/openformat.datasource.mocked";
 
 async function performTestQuery({ query, variables, context }) {
   return graphql(internalSchema, query, null, context, variables);
 }
 
 describe("API test cases", () => {
-  test("Get all work fields that do not require nested requests", async () => {
+  test("Get all work fields", async () => {
     const result = await performTestQuery({
       query: `
           query ($id: String!) {
             work(id: $id) {
-              creators {
-                type
-                name
+                creators {
+                  type
+                  name
+                }
+                description
+                fullTitle
+                manifestations {
+                  creators {
+                    functionCode
+                    functionSingular
+                    name
+                  }
+                  datePublished
+                  materialType
+                  language
+                  physicalDescription
+                }
+                materialTypes {
+                  creators {
+                    functionCode
+                    functionSingular
+                    name
+                  }
+                  datePublished
+                  materialType
+                  language
+                  physicalDescription
+                }
+                path
+                subjects {
+                  type
+                  value
+                }
+                title
               }
-              description
-              fullTitle
-              manifestations {
-                materialType
-                pid
-              }
-              materialTypes {
-                materialType
-                pid
-              }
-              path
-              subjects {
-                type
-                value
-              }
-              title
-            }
           }
         `,
       variables: { id: "work-of:870970-basis:26521556" },
-      context: { datasources: { workservice: mockedWorkDataSource } }
+      context: {
+        datasources: {
+          workservice: mockedWorkDataSource,
+          openformat: mockedOpenformat
+        }
+      }
     });
     expect(result).toMatchSnapshot();
   });

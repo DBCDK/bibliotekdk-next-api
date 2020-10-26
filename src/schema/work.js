@@ -14,8 +14,8 @@ export const typeDef = `
     fullTitle: String
     description: String
     creators: [Creator!]!
-    manifestations: [ManifestationPreview!]!
-    materialTypes: [ManifestationPreview!]!
+    manifestations: [WorkManifestation!]!
+    materialTypes: [WorkManifestation!]!
     path: [String!]!
     reviews: [Review!]!
     series: Series

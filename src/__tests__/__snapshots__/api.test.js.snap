@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`API test cases Get all work fields that do not require nested requests 1`] = `
+exports[`API test cases Get all work fields 1`] = `
 Object {
   "data": Object {
     "work": Object {
@@ -14,30 +14,126 @@ Object {
       "fullTitle": "Min kamp : roman. 1. bog",
       "manifestations": Array [
         Object {
+          "creators": Array [
+            Object {
+              "functionCode": "aut",
+              "functionSingular": "forfatter",
+              "name": "Kim Fupz Ꜳkeson",
+            },
+            Object {
+              "functionCode": "dkind",
+              "functionSingular": "indlæser",
+              "name": "Peter Frödin",
+            },
+          ],
+          "datePublished": "2012",
+          "language": Array [
+            "Dansk",
+          ],
           "materialType": "Bog",
-          "pid": "800010-katalog:99121962154805763__1",
+          "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "creators": Array [
+            Object {
+              "functionCode": "aut",
+              "functionSingular": "forfatter",
+              "name": "Kim Fupz Ꜳkeson",
+            },
+            Object {
+              "functionCode": "dkind",
+              "functionSingular": "indlæser",
+              "name": "Peter Frödin",
+            },
+          ],
+          "datePublished": "2012",
+          "language": Array [
+            "Dansk",
+          ],
           "materialType": "Bog",
-          "pid": "300101-katalog:28486006",
+          "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "creators": Array [
+            Object {
+              "functionCode": "aut",
+              "functionSingular": "forfatter",
+              "name": "Kim Fupz Ꜳkeson",
+            },
+            Object {
+              "functionCode": "dkind",
+              "functionSingular": "indlæser",
+              "name": "Peter Frödin",
+            },
+          ],
+          "datePublished": "2012",
+          "language": Array [
+            "Dansk",
+          ],
           "materialType": "Bog",
-          "pid": "870970-basis:29433909",
+          "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "creators": Array [
+            Object {
+              "functionCode": "aut",
+              "functionSingular": "forfatter",
+              "name": "Kim Fupz Ꜳkeson",
+            },
+            Object {
+              "functionCode": "dkind",
+              "functionSingular": "indlæser",
+              "name": "Peter Frödin",
+            },
+          ],
+          "datePublished": "2012",
+          "language": Array [
+            "Dansk",
+          ],
           "materialType": "Ebog",
-          "pid": "300101-katalog:28486006",
+          "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
       ],
       "materialTypes": Array [
         Object {
+          "creators": Array [
+            Object {
+              "functionCode": "aut",
+              "functionSingular": "forfatter",
+              "name": "Kim Fupz Ꜳkeson",
+            },
+            Object {
+              "functionCode": "dkind",
+              "functionSingular": "indlæser",
+              "name": "Peter Frödin",
+            },
+          ],
+          "datePublished": "2012",
+          "language": Array [
+            "Dansk",
+          ],
           "materialType": "Bog",
-          "pid": "870970-basis:29433909",
+          "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "creators": Array [
+            Object {
+              "functionCode": "aut",
+              "functionSingular": "forfatter",
+              "name": "Kim Fupz Ꜳkeson",
+            },
+            Object {
+              "functionCode": "dkind",
+              "functionSingular": "indlæser",
+              "name": "Peter Frödin",
+            },
+          ],
+          "datePublished": "2012",
+          "language": Array [
+            "Dansk",
+          ],
           "materialType": "Ebog",
-          "pid": "300101-katalog:28486006",
+          "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
       ],
       "path": Array [
