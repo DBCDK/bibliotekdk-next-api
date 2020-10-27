@@ -14,6 +14,7 @@ Object {
       "fullTitle": "Min kamp : roman. 1. bog",
       "manifestations": Array [
         Object {
+          "content": null,
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -34,6 +35,7 @@ Object {
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "content": null,
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -54,6 +56,15 @@ Object {
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "content": Array [
+            "Dansktop",
+            "Evergreens",
+            "Pop/rock-hits fra 50'rne og 60'rne",
+            "Pop/rock hits 70'rne og nyere",
+            "Børnesange",
+            "Melodi Grand Prix",
+            "Billedrunden",
+          ],
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -74,6 +85,7 @@ Object {
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "content": null,
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -96,6 +108,15 @@ Object {
       ],
       "materialTypes": Array [
         Object {
+          "content": Array [
+            "Dansktop",
+            "Evergreens",
+            "Pop/rock-hits fra 50'rne og 60'rne",
+            "Pop/rock hits 70'rne og nyere",
+            "Børnesange",
+            "Melodi Grand Prix",
+            "Billedrunden",
+          ],
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -116,6 +137,7 @@ Object {
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
         },
         Object {
+          "content": null,
           "creators": Array [
             Object {
               "functionCode": "aut",

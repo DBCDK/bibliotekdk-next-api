@@ -10,6 +10,7 @@ import { getArray, matchYear } from "../utils/utils";
  */
 export const typeDef = `
     type WorkManifestation {
+      content: [String!]
       cover: Cover! 
       creators: [Creator!]!
       datePublished: String!
@@ -34,6 +35,23 @@ export const typeDef = `
  */
 export const resolvers = {
   WorkManifestation: {
+    async content(parent, args, context, info) {
+      if (parent.content) {
+        return parent.content;
+      }
+      const manifestation = await context.datasources.openformat.load(
+        parent.id
+      );
+      const contentStr =
+        getArray(manifestation, "details.content.value.contentText.$")[0] || "";
+
+      if (contentStr && typeof contentStr === "string") {
+        // Make an array out of the content string.
+        // Not perfect, the problem needs to be solved in openformat
+        // or somehwere other place.
+        return contentStr.replace(/indhold:\s*/i, "").split(/\s*[;]\s*/);
+      }
+    },
     cover(parent, args, context, info) {
       // Fetch cover, and pass it to Cover resolver
       return context.datasources.moreinfo.load(parent.id);
@@ -45,6 +63,7 @@ export const resolvers = {
       const manifestation = await context.datasources.openformat.load(
         parent.id
       );
+
       return (
         getArray(manifestation, "details.abstract.value").map(
           entry => entry.$

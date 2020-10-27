@@ -43,6 +43,7 @@ describe("API test cases", () => {
                 description
                 fullTitle
                 manifestations {
+                  content
                   creators {
                     functionCode
                     functionSingular
@@ -54,6 +55,7 @@ describe("API test cases", () => {
                   physicalDescription
                 }
                 materialTypes {
+                  content
                   creators {
                     functionCode
                     functionSingular

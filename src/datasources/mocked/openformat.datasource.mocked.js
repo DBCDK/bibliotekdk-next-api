@@ -409,6 +409,14 @@ export default {
               $: "DLF201207 BKM201207"
             }
           },
+          content: {
+            value: {
+              contentText: {
+                $:
+                  "Indhold: Dansktop ; Evergreens ; Pop/rock-hits fra 50'rne og 60'rne ; Pop/rock hits 70'rne og nyere ; Børnesange ; Melodi Grand Prix ; Billedrunden"
+              }
+            }
+          },
           creators: {
             value: [
               {
