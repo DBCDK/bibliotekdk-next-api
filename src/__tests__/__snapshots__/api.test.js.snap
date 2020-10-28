@@ -28,11 +28,14 @@ Object {
             },
           ],
           "datePublished": "2012",
+          "edition": "1. udgave",
+          "isbn": "9788711407134",
           "language": Array [
             "Dansk",
           ],
           "materialType": "Bog",
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
+          "publisher": "Kbh., Carlsen",
         },
         Object {
           "content": null,
@@ -49,11 +52,14 @@ Object {
             },
           ],
           "datePublished": "2012",
+          "edition": "1. udgave",
+          "isbn": "9788711407134",
           "language": Array [
             "Dansk",
           ],
           "materialType": "Bog",
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
+          "publisher": "Kbh., Carlsen",
         },
         Object {
           "content": Array [
@@ -78,11 +84,14 @@ Object {
             },
           ],
           "datePublished": "2012",
+          "edition": "1. udgave",
+          "isbn": "9788711407134",
           "language": Array [
             "Dansk",
           ],
           "materialType": "Bog",
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
+          "publisher": "Kbh., Carlsen",
         },
         Object {
           "content": null,
@@ -99,11 +108,14 @@ Object {
             },
           ],
           "datePublished": "2012",
+          "edition": "1. udgave",
+          "isbn": "9788711407134",
           "language": Array [
             "Dansk",
           ],
           "materialType": "Ebog",
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
+          "publisher": "Kbh., Carlsen",
         },
       ],
       "materialTypes": Array [
@@ -130,11 +142,14 @@ Object {
             },
           ],
           "datePublished": "2012",
+          "edition": "1. udgave",
+          "isbn": "9788711407134",
           "language": Array [
             "Dansk",
           ],
           "materialType": "Bog",
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
+          "publisher": "Kbh., Carlsen",
         },
         Object {
           "content": null,
@@ -151,11 +166,14 @@ Object {
             },
           ],
           "datePublished": "2012",
+          "edition": "1. udgave",
+          "isbn": "9788711407134",
           "language": Array [
             "Dansk",
           ],
           "materialType": "Ebog",
           "physicalDescription": "1 cd i 1 mappe (67 min.)",
+          "publisher": "Kbh., Carlsen",
         },
       ],
       "path": Array [
@@ -164,6 +182,10 @@ Object {
         "skønlitteratur",
         "roman",
       ],
+      "seo": Object {
+        "description": "Lån min kamp som bog eller ebog. Bestil, reserver, lån fra alle danmarks biblioteker. Afhent på dit lokale bibliotek eller find online.",
+        "title": "min kamp af karl ove knausgård",
+      },
       "subjects": Array [
         Object {
           "type": "dcterms:LCSH",

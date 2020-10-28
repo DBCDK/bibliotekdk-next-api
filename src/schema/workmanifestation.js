@@ -15,11 +15,14 @@ export const typeDef = `
       creators: [Creator!]!
       datePublished: String!
       description: String!
+      edition: String!
       fullTitle: String!
+      isbn: String
       language: [String!]!
       materialType: String!
       physicalDescription: String!
       pid: String!
+      publisher: String!
       title: String
       recommendations(limit: Int): [Recommendation!]!
     }
@@ -85,6 +88,15 @@ export const resolvers = {
       const year = matchYear(publication);
       return (year && year[0]) || "";
     },
+    async edition(parent, args, context, info) {
+      if (parent.edition) {
+        return parent.edition;
+      }
+      const manifestation = await context.datasources.openformat.load(
+        parent.id
+      );
+      return getArray(manifestation, "details.edition.value.$")[0] || "";
+    },
     async fullTitle(parent, args, context, info) {
       if (parent.fullTitle) {
         return parent.fullTitle;
@@ -97,6 +109,18 @@ export const resolvers = {
           entry => entry.$
         )[0] || ""
       );
+    },
+    async isbn(parent, args, context, info) {
+      if (parent.isbn) {
+        return parent.isbn;
+      }
+      const manifestation = await context.datasources.openformat.load(
+        parent.id
+      );
+      const res = getArray(manifestation, "details.isbn.value.$")[0];
+      if (typeof res === "string") {
+        return res.replace(/-/g, "");
+      }
     },
     async language(parent, args, context, info) {
       const manifestation = await context.datasources.openformat.load(
@@ -125,6 +149,15 @@ export const resolvers = {
     },
     pid(parent, args, context, info) {
       return parent.id;
+    },
+    async publisher(parent, args, context, info) {
+      const manifestation = await context.datasources.openformat.load(
+        parent.id
+      );
+      const publication =
+        getArray(manifestation, "details.publication.value.$")[0] || "";
+      // remove year, until this is done in openformat
+      return publication.replace(/\s*,\s*\d+$/, "");
     },
     async recommendations(parent, args, context, info) {
       const recommendations = await context.datasources.recommendations.load({

@@ -19,6 +19,7 @@ import {
   typeDef as SearchQuery,
   resolvers as SearchQueryResolvers
 } from "./searchquery";
+import { typeDef as SEO, resolvers as SEOResolvers } from "./seo";
 import { typeDef as Series, resolvers as SeriesResolvers } from "./series";
 import { typeDef as Subject, resolvers as SubjectResolvers } from "./subject";
 import {
@@ -44,6 +45,7 @@ export const internalSchema = makeExecutableSchema({
     Review,
     Creator,
     SearchQuery,
+    SEO,
     Series,
     Subject,
     AdminData,
@@ -66,6 +68,7 @@ export const internalSchema = makeExecutableSchema({
     ...ReviewResolvers,
     ...CreatorResolvers,
     ...SearchQueryResolvers,
+    ...SEOResolvers,
     ...SeriesResolvers,
     ...SubjectResolvers,
     ...AdminDataResolvers,

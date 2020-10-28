@@ -50,9 +50,12 @@ describe("API test cases", () => {
                     name
                   }
                   datePublished
+                  edition
+                  isbn
                   materialType
                   language
                   physicalDescription
+                  publisher
                 }
                 materialTypes {
                   content
@@ -62,11 +65,18 @@ describe("API test cases", () => {
                     name
                   }
                   datePublished
+                  edition
+                  isbn
                   materialType
                   language
                   physicalDescription
+                  publisher
                 }
                 path
+                seo {
+                  title
+                  description
+                }
                 subjects {
                   type
                   value
