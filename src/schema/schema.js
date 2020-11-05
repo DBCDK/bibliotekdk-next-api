@@ -3,29 +3,29 @@ import { makeExecutableSchema, mergeSchemas } from "graphql-tools";
 import { typeDef as DK5, resolvers as DK5Resolvers } from "./dk5";
 import {
   typeDef as WorkManifestation,
-  resolvers as WorkManifestationResolvers,
+  resolvers as WorkManifestationResolvers
 } from "./workmanifestation";
 import { typeDef as Work, resolvers as WorkResolvers } from "./work";
 import {
   typeDef as Manifestation,
-  resolvers as ManifestationResolvers,
+  resolvers as ManifestationResolvers
 } from "./manifestation";
 import {
   typeDef as Recommendation,
-  resolvers as RecommendationResolvers,
+  resolvers as RecommendationResolvers
 } from "./recommendation";
 import { typeDef as Review, resolvers as ReviewResolvers } from "./review";
 import { typeDef as Creator, resolvers as CreatorResolvers } from "./creator";
 import {
   typeDef as SearchQuery,
-  resolvers as SearchQueryResolvers,
+  resolvers as SearchQueryResolvers
 } from "./searchquery";
 import { typeDef as SEO, resolvers as SEOResolvers } from "./seo";
 import { typeDef as Series, resolvers as SeriesResolvers } from "./series";
 import { typeDef as Subject, resolvers as SubjectResolvers } from "./subject";
 import {
   typeDef as AdminData,
-  resolvers as AdminDataResolvers,
+  resolvers as AdminDataResolvers
 } from "./admindata";
 import { typeDef as Cover, resolvers as CoverResolvers } from "./cover";
 import drupalSchema from "./external/drupal";
@@ -51,7 +51,7 @@ export const internalSchema = makeExecutableSchema({
     Series,
     Subject,
     AdminData,
-    Cover,
+    Cover
   ],
   resolvers: {
     Query: {
@@ -61,7 +61,7 @@ export const internalSchema = makeExecutableSchema({
       async work(parent, args, context, info) {
         const { work } = await context.datasources.workservice.load(args.id);
         return { ...work, id: args.id };
-      },
+      }
     },
     ...DK5Resolvers,
     ...WorkManifestationResolvers,
@@ -75,8 +75,8 @@ export const internalSchema = makeExecutableSchema({
     ...SeriesResolvers,
     ...SubjectResolvers,
     ...AdminDataResolvers,
-    ...CoverResolvers,
-  },
+    ...CoverResolvers
+  }
 });
 
 /**
@@ -84,6 +84,6 @@ export const internalSchema = makeExecutableSchema({
  */
 export default async () => {
   return mergeSchemas({
-    subschemas: [{ schema: await drupalSchema() }, { schema: internalSchema }],
+    subschemas: [{ schema: await drupalSchema() }, { schema: internalSchema }]
   });
 };

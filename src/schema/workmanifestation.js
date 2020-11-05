@@ -53,7 +53,7 @@ export const resolvers = {
 
       const contentStr =
         getArray(manifestation, "details.content.value.contentText").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || "";
 
       if (contentStr && typeof contentStr === "string") {
@@ -77,7 +77,7 @@ export const resolvers = {
 
       return (
         getArray(manifestation, "details.abstract.value").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
     },
@@ -88,10 +88,10 @@ export const resolvers = {
       const manifestation = await context.datasources.openformat.load(
         parent.id
       );
-      return getArray(manifestation, "details.dk5").map((entry) => ({
+      return getArray(manifestation, "details.dk5").map(entry => ({
         searchCode: (entry.searchCode && entry.searchCode.$) || "",
         searchString: (entry.searchString && entry.searchString.$) || "",
-        value: (entry.value && entry.value.$) || "",
+        value: (entry.value && entry.value.$) || ""
       }));
     },
     async creators(parent, args, context, info) {
@@ -123,7 +123,7 @@ export const resolvers = {
       );
       return (
         getArray(manifestation, "details.edition.value").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
     },
@@ -136,7 +136,7 @@ export const resolvers = {
       );
       return (
         getArray(manifestation, "details.title.value").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
     },
@@ -149,7 +149,7 @@ export const resolvers = {
       );
 
       const res = getArray(manifestation, "details.isbn.value").map(
-        (entry) => entry.$
+        entry => entry.$
       )[0];
       if (typeof res === "string") {
         return res.replace(/-/g, "");
@@ -159,9 +159,7 @@ export const resolvers = {
       const manifestation = await context.datasources.openformat.load(
         parent.id
       );
-      return getArray(manifestation, "details.language").map(
-        (entry) => entry.$
-      );
+      return getArray(manifestation, "details.language").map(entry => entry.$);
     },
 
     async materialType(parent, args, context, info) {
@@ -173,7 +171,7 @@ export const resolvers = {
       );
       return (
         getArray(manifestation, "details.materialType").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
     },
@@ -185,7 +183,7 @@ export const resolvers = {
         parent.id
       );
       return getArray(manifestation, "details.notes.value").map(
-        (entry) => entry.$
+        entry => entry.$
       );
     },
     async originals(parent, args, context, info) {
@@ -199,7 +197,7 @@ export const resolvers = {
         console.log("ja");
       }
       return getArray(manifestation, "details.originals.value").map(
-        (entry) => entry.$
+        entry => entry.$
       );
     },
     async originalTitle(parent, args, context, info) {
@@ -211,7 +209,7 @@ export const resolvers = {
       );
       return (
         getArray(manifestation, "details.originalTitle.value").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
     },
@@ -221,7 +219,7 @@ export const resolvers = {
       );
       return (
         getArray(manifestation, "details.physicalDescription.value").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
     },
@@ -234,8 +232,8 @@ export const resolvers = {
       );
       const publication =
         getArray(manifestation, "details.publication.value")
-          .map((entry) => entry.$)
-          .filter((entry) => entry.includes(","))[0] || "";
+          .map(entry => entry.$)
+          .filter(entry => entry.includes(","))[0] || "";
 
       // remove year, until this is done in openformat
       return publication.replace(/\s*,\s*\d+.*$/, "");
@@ -243,7 +241,7 @@ export const resolvers = {
     async recommendations(parent, args, context, info) {
       const recommendations = await context.datasources.recommendations.load({
         pid: parent.id,
-        limit: args.limit,
+        limit: args.limit
       });
       return recommendations.response;
     },
@@ -256,7 +254,7 @@ export const resolvers = {
       );
 
       return getArray(manifestation, "details.shelf.value").map(
-        (entry) => entry.$
+        entry => entry.$
       )[0];
     },
     async title(parent, args, context, info) {
@@ -268,9 +266,9 @@ export const resolvers = {
       );
       return (
         getArray(manifestation, "details.title.value").map(
-          (entry) => entry.$
+          entry => entry.$
         )[0] || ""
       );
-    },
-  },
+    }
+  }
 };
