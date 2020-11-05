@@ -50,12 +50,21 @@ describe("API test cases", () => {
                     name
                   }
                   datePublished
+                  dk5 {
+                    searchCode
+                    searchString
+                    value
+                  }
                   edition
                   isbn
                   materialType
+                  notes
+                  originals
+                  originalTitle
                   language
                   physicalDescription
                   publisher
+                  shelf
                 }
                 materialTypes {
                   content
@@ -65,12 +74,21 @@ describe("API test cases", () => {
                     name
                   }
                   datePublished
+                  dk5 {
+                    searchCode
+                    searchString
+                    value
+                  }
                   edition
                   isbn
                   materialType
+                  notes
+                  originals
+                  originalTitle
                   language
                   physicalDescription
                   publisher
+                  shelf
                 }
                 path
                 seo {
@@ -89,9 +107,9 @@ describe("API test cases", () => {
       context: {
         datasources: {
           workservice: mockedWorkDataSource,
-          openformat: mockedOpenformat
-        }
-      }
+          openformat: mockedOpenformat,
+        },
+      },
     });
     expect(result).toMatchSnapshot();
   });
@@ -109,17 +127,17 @@ describe("API test cases", () => {
           }
         `,
       variables: { id: "work-of:870970-basis:26521556" },
-      context: { datasources: { workservice: mockedWorkDataSource } }
+      context: { datasources: { workservice: mockedWorkDataSource } },
     });
     expect(result).toEqual({
       data: {
         work: {
           materialTypes: [
             { pid: "870970-basis:29433909", materialType: "Bog" },
-            { pid: "300101-katalog:28486006", materialType: "Ebog" }
-          ]
-        }
-      }
+            { pid: "300101-katalog:28486006", materialType: "Ebog" },
+          ],
+        },
+      },
     });
   });
 
@@ -133,14 +151,14 @@ describe("API test cases", () => {
               }
             `,
       variables: { id: "work-of:870970-basis:26521556" },
-      context: { datasources: { workservice: mockedWorkDataSource } }
+      context: { datasources: { workservice: mockedWorkDataSource } },
     });
     expect(result).toMatchObject({
       errors: [
         {
-          message: 'Cannot query field "dunno" on type "Work".'
-        }
-      ]
+          message: 'Cannot query field "dunno" on type "Work".',
+        },
+      ],
     });
   });
 
@@ -154,15 +172,16 @@ describe("API test cases", () => {
           }
         `,
       variables: {},
-      context: { datasources: { workservice: mockedWorkDataSource } }
+      context: { datasources: { workservice: mockedWorkDataSource } },
     });
 
     expect(result).toMatchObject({
       errors: [
         {
-          message: 'Variable "$id" of required type "String!" was not provided.'
-        }
-      ]
+          message:
+            'Variable "$id" of required type "String!" was not provided.',
+        },
+      ],
     });
   });
 
@@ -176,14 +195,14 @@ describe("API test cases", () => {
           }
         `,
       variables: {},
-      context: { datasources: { workservice: mockedWorkDataSource } }
+      context: { datasources: { workservice: mockedWorkDataSource } },
     });
     expect(result).toMatchObject({
       errors: [
         {
-          message: "Syntax Error: Expected Name, found <EOF>."
-        }
-      ]
+          message: "Syntax Error: Expected Name, found <EOF>.",
+        },
+      ],
     });
   });
 
@@ -205,21 +224,21 @@ describe("API test cases", () => {
           workservice: {
             load: () => {
               throw new Error("Not Found");
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     });
     expect(result).toMatchObject({
       errors: [
         {
           message: "Not Found",
-          path: ["work"]
-        }
+          path: ["work"],
+        },
       ],
       data: {
-        work: null
-      }
+        work: null,
+      },
     });
   });
 
