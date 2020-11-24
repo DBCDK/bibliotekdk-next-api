@@ -184,9 +184,6 @@ export const resolvers = {
       const manifestation = await context.datasources.openformat.load(
         parent.id
       );
-      if (JSON.stringify(manifestation).includes("ota")) {
-        console.log("ja");
-      }
       return getArray(manifestation, "details.originals.value").map(
         entry => entry.$
       );
