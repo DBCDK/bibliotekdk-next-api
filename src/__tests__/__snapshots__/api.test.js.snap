@@ -14,9 +14,7 @@ Object {
       "fullTitle": "Min kamp : roman. 1. bog",
       "manifestations": Array [
         Object {
-          "content": Array [
-            "",
-          ],
+          "content": Array [],
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -62,9 +60,7 @@ Object {
           "shelf": "skønlitteratur",
         },
         Object {
-          "content": Array [
-            "",
-          ],
+          "content": Array [],
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -160,9 +156,7 @@ Object {
           "shelf": "skønlitteratur",
         },
         Object {
-          "content": Array [
-            "",
-          ],
+          "content": Array [],
           "creators": Array [
             Object {
               "functionCode": "aut",
@@ -260,9 +254,7 @@ Object {
           "shelf": "skønlitteratur",
         },
         Object {
-          "content": Array [
-            "",
-          ],
+          "content": Array [],
           "creators": Array [
             Object {
               "functionCode": "aut",

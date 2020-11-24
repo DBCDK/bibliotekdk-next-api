@@ -51,12 +51,13 @@ export const resolvers = {
         parent.id
       );
 
-      const content =
-        getArray(manifestation, "details.content.value").map(
-          entry => entry.$
-        )[0] || "";
-
-      return content.split(/\s*[;]\s*/);
+      const content = getArray(manifestation, "details.content.value").map(
+        entry => entry.$
+      )[0];
+      if (content) {
+        return content.split(/\s*[;]\s*/);
+      }
+      return [];
     },
     cover(parent, args, context, info) {
       // Fetch cover, and pass it to Cover resolver
