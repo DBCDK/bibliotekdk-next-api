@@ -2,6 +2,7 @@ import request from "superagent";
 import config from "../config";
 import { withRedis } from "./redis.datasource";
 import displayFormat from "./openformat.displayformat.json";
+import monitor from "../utils/monitor";
 
 const { url, ttl, prefix } = config.datasources.openformat;
 
@@ -22,10 +23,13 @@ function createRequest(pid) {
 </SOAP-ENV:Envelope>`;
 }
 
-async function fetchManifestation({ pid }) {
-  return (await request.post(url).field("xml", createRequest(pid))).body
-    .formatResponse.customDisplay[0].manifestation;
-}
+const fetchManifestation = monitor(
+  { name: "REQUEST_openformat", help: "openformat requests" },
+  async function({ pid }) {
+    return (await request.post(url).field("xml", createRequest(pid))).body
+      .formatResponse.customDisplay[0].manifestation;
+  }
+);
 
 /**
  * The status function

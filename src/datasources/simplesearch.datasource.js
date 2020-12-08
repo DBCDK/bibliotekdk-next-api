@@ -4,19 +4,23 @@
  */
 
 import request from "superagent";
+import monitor from "../utils/monitor";
 import { withRedis } from "./redis.datasource";
 
-export const find = async ({ q }) => {
-  return (
-    await request
-      .post("http://simple-search-bibdk-1-0.mi-prod.svc.cloud.dbc.dk/search")
-      .send({
-        q,
-        debug: true,
-        options: { "include-phonetic-creator": false }
-      })
-  ).body;
-};
+export const find = monitor(
+  { name: "REQUEST_simplesearch", help: "simplesearch requests" },
+  async ({ q }) => {
+    return (
+      await request
+        .post("http://simple-search-bibdk-1-0.mi-prod.svc.cloud.dbc.dk/search")
+        .send({
+          q,
+          debug: true,
+          options: { "include-phonetic-creator": false }
+        })
+    ).body;
+  }
+);
 
 /**
  * A DataLoader batch function

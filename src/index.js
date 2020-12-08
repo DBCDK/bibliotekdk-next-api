@@ -18,12 +18,29 @@ import graphqlHTTP from "express-graphql";
 import DataLoader from "dataloader";
 import config from "./config";
 import howruHandler from "./howru";
+import { metrics, observeDuration, count } from "./utils/monitor";
+import { selectionsToKey } from "./utils/graphqlparser";
 
 const app = express();
 let server;
 
 (async () => {
   app.use(cors());
+
+  // Middleware that monitors performance of GraphQL queries
+  app.use(async (req, res, next) => {
+    const start = process.hrtime();
+    res.once("finish", () => {
+      // If queryKey is present in req, the query was succesful
+      // and we observe the duration
+      if (req.queryKey) {
+        const elapsed = process.hrtime(start);
+        const seconds = elapsed[0] + elapsed[1] / 1e9;
+        observeDuration(req.queryKey, seconds);
+      }
+    });
+    next();
+  });
 
   // set up context per request
   app.use((req, res, next) => {
@@ -60,12 +77,24 @@ let server;
     "/graphql",
     graphqlHTTP({
       schema: await schema(),
-      graphiql: true
+      graphiql: true,
+      extensions: ({ document, context, result }) => {
+        // Create queryKey if query was succesful
+        if (document && document.definitions && !result.errors) {
+          context.queryKey = selectionsToKey(document.definitions);
+          count("query_success");
+        } else {
+          count("query_error");
+        }
+      }
     })
   );
 
   // Setup route handler for howru
   app.get("/howru", howruHandler);
+
+  // Setup route handler for metrics
+  app.get("/metrics", metrics);
 
   server = app.listen(config.port);
   log.info(`Running GraphQL API at http://localhost:${config.port}/graphql`);

@@ -2,6 +2,7 @@ import { log } from "dbc-node-logger";
 import request from "superagent";
 import config from "../config";
 import { withRedis } from "./redis.datasource";
+import monitor from "../utils/monitor";
 
 const { url, agencyId, profile, ttl, prefix } = config.datasources.work;
 
@@ -10,16 +11,19 @@ const { url, agencyId, profile, ttl, prefix } = config.datasources.work;
  * @param {Object} params
  * @param {string} params.workId id of the work
  */
-async function fetchWork({ workId }) {
-  return (
-    await request.get(url).query({
-      workId,
-      // trackingId: 'bibdk-api', this should be dynamic, and be generated per graphql request
-      agencyId,
-      profile
-    })
-  ).body;
-}
+const fetchWork = monitor(
+  { name: "REQUEST_work", help: "work requests" },
+  async function({ workId }) {
+    return (
+      await request.get(url).query({
+        workId,
+        // trackingId: 'bibdk-api', this should be dynamic, and be generated per graphql request
+        agencyId,
+        profile
+      })
+    ).body;
+  }
+);
 
 /**
  * A DataLoader batch function

@@ -1,5 +1,6 @@
 import request from "superagent";
 import config from "../config";
+import monitor from "../utils/monitor";
 import { withRedis } from "./redis.datasource";
 
 const {
@@ -25,21 +26,24 @@ function createRequest(pid) {
 </mi:moreInfoRequest>`;
 }
 
-async function fetchMoreInfo({ pid }) {
-  const images = (
-    await request.post(url).field("xml", createRequest(pid))
-  ).body.moreInfoResponse.identifierInformation
-    .map(entry => entry.coverImage)
-    .filter(entry => entry);
+const fetchMoreInfo = monitor(
+  { name: "REQUEST_moreinfo", help: "moreinfo request" },
+  async function fetchMoreInfo({ pid }) {
+    const images = (
+      await request.post(url).field("xml", createRequest(pid))
+    ).body.moreInfoResponse.identifierInformation
+      .map(entry => entry.coverImage)
+      .filter(entry => entry);
 
-  const res = {};
-  images.forEach(entry => {
-    entry.forEach(cover => {
-      res[cover["@imageSize"].$] = cover.$;
+    const res = {};
+    images.forEach(entry => {
+      entry.forEach(cover => {
+        res[cover["@imageSize"].$] = cover.$;
+      });
     });
-  });
-  return res;
-}
+    return res;
+  }
+);
 
 /**
  * The status function

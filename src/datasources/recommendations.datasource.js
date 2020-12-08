@@ -3,18 +3,24 @@
  */
 
 import request from "superagent";
+import monitor from "../utils/monitor";
 import { withRedis } from "./redis.datasource";
 
-export const find = async ({ pid, limit = 10 }) => {
-  return (
-    await request
-      .post("http://recompass-work-1-2.mi-prod.svc.cloud.dbc.dk/recompass-work")
-      .send({
-        likes: [pid],
-        limit
-      })
-  ).body;
-};
+export const find = monitor(
+  { name: "REQUEST_recommendations", help: "recommendations requests" },
+  async ({ pid, limit = 10 }) => {
+    return (
+      await request
+        .post(
+          "http://recompass-work-1-2.mi-prod.svc.cloud.dbc.dk/recompass-work"
+        )
+        .send({
+          likes: [pid],
+          limit
+        })
+    ).body;
+  }
+);
 
 /**
  * A DataLoader batch function
