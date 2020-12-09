@@ -21,7 +21,7 @@
  *
  */
 
-import { graphql, GraphQLError } from "graphql";
+import { graphql } from "graphql";
 import { internalSchema } from "../schema/schema";
 import mockedWorkDataSource from "../datasources/mocked/work.datasource.mocked";
 import mockedOpenformat from "../datasources/mocked/openformat.datasource.mocked";
