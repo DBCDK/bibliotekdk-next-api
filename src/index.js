@@ -24,6 +24,13 @@ import { selectionsToKey } from "./utils/graphqlparser";
 const app = express();
 let server;
 
+const promExporterApp = express();
+// Setup route handler for metrics
+promExporterApp.get("/metrics", metrics);
+promExporterApp.listen(9599, () => {
+  log.info(`Running metrics endpoint at http://localhost:9599/metrics`);
+});
+
 (async () => {
   app.use(cors());
 
@@ -93,11 +100,9 @@ let server;
   // Setup route handler for howru
   app.get("/howru", howruHandler);
 
-  // Setup route handler for metrics
-  app.get("/metrics", metrics);
-
-  server = app.listen(config.port);
-  log.info(`Running GraphQL API at http://localhost:${config.port}/graphql`);
+  server = app.listen(config.port, () => {
+    log.info(`Running GraphQL API at http://localhost:${config.port}/graphql`);
+  });
 })();
 
 const signals = {
