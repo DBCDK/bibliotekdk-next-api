@@ -11,18 +11,22 @@ const { url, agencyId, profile, ttl, prefix } = config.datasources.work;
  * @param {Object} params
  * @param {string} params.workId id of the work
  */
-const fetchWork = monitor(
+
+async function fetchWork({ workId }) {
+  return (
+    await request.get(url).query({
+      workId,
+      // trackingId: 'bibdk-api', this should be dynamic, and be generated per graphql request
+      agencyId,
+      profile
+    })
+  ).body;
+}
+
+// fetchWork monitored
+const monitored = monitor(
   { name: "REQUEST_work", help: "work requests" },
-  async function({ workId }) {
-    return (
-      await request.get(url).query({
-        workId,
-        // trackingId: 'bibdk-api', this should be dynamic, and be generated per graphql request
-        agencyId,
-        profile
-      })
-    ).body;
-  }
+  fetchWork
 );
 
 /**
@@ -34,7 +38,7 @@ async function batchLoader(keys) {
   return await Promise.all(
     keys.map(async key => {
       try {
-        return await fetchWork({ workId: key });
+        return await monitored({ workId: key });
       } catch (e) {
         // We return error instead of throwing,
         // se we don't fail entire Promise.all
@@ -54,7 +58,7 @@ async function batchLoader(keys) {
  * @throws Will throw error if service is down
  */
 export async function status() {
-  await fetchWork({ workId: "work-of:870970-basis:51877330" });
+  await monitored({ workId: "work-of:870970-basis:51877330" });
 }
 
 /**

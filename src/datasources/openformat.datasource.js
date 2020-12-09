@@ -23,12 +23,15 @@ function createRequest(pid) {
 </SOAP-ENV:Envelope>`;
 }
 
-const fetchManifestation = monitor(
+async function fetchManifestation({ pid }) {
+  return (await request.post(url).field("xml", createRequest(pid))).body
+    .formatResponse.customDisplay[0].manifestation;
+}
+
+// fetchManifestation monitored
+const monitored = monitor(
   { name: "REQUEST_openformat", help: "openformat requests" },
-  async function({ pid }) {
-    return (await request.post(url).field("xml", createRequest(pid))).body
-      .formatResponse.customDisplay[0].manifestation;
-  }
+  fetchManifestation
 );
 
 /**
@@ -50,7 +53,7 @@ export async function status() {
  */
 async function batchLoader(keys) {
   return await Promise.all(
-    keys.map(async key => await fetchManifestation({ pid: key }))
+    keys.map(async key => await monitored({ pid: key }))
   );
 }
 

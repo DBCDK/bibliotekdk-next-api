@@ -6,20 +6,21 @@ import request from "superagent";
 import monitor from "../utils/monitor";
 import { withRedis } from "./redis.datasource";
 
-export const find = monitor(
+async function find({ pid, limit = 10 }) {
+  return (
+    await request
+      .post("http://recompass-work-1-2.mi-prod.svc.cloud.dbc.dk/recompass-work")
+      .send({
+        likes: [pid],
+        limit
+      })
+  ).body;
+}
+
+// find monitored
+const monitored = monitor(
   { name: "REQUEST_recommendations", help: "recommendations requests" },
-  async ({ pid, limit = 10 }) => {
-    return (
-      await request
-        .post(
-          "http://recompass-work-1-2.mi-prod.svc.cloud.dbc.dk/recompass-work"
-        )
-        .send({
-          likes: [pid],
-          limit
-        })
-    ).body;
-  }
+  find
 );
 
 /**
@@ -31,7 +32,7 @@ export const find = monitor(
  * @param {Array.<string>} keys The keys to fetch
  */
 async function batchLoader(keys) {
-  return await Promise.all(keys.map(async key => await find(key)));
+  return await Promise.all(keys.map(async key => await monitored(key)));
 }
 
 /**

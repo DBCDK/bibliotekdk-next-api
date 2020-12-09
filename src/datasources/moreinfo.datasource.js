@@ -26,23 +26,26 @@ function createRequest(pid) {
 </mi:moreInfoRequest>`;
 }
 
-const fetchMoreInfo = monitor(
-  { name: "REQUEST_moreinfo", help: "moreinfo request" },
-  async function fetchMoreInfo({ pid }) {
-    const images = (
-      await request.post(url).field("xml", createRequest(pid))
-    ).body.moreInfoResponse.identifierInformation
-      .map(entry => entry.coverImage)
-      .filter(entry => entry);
+async function fetchMoreInfo({ pid }) {
+  const images = (
+    await request.post(url).field("xml", createRequest(pid))
+  ).body.moreInfoResponse.identifierInformation
+    .map(entry => entry.coverImage)
+    .filter(entry => entry);
 
-    const res = {};
-    images.forEach(entry => {
-      entry.forEach(cover => {
-        res[cover["@imageSize"].$] = cover.$;
-      });
+  const res = {};
+  images.forEach(entry => {
+    entry.forEach(cover => {
+      res[cover["@imageSize"].$] = cover.$;
     });
-    return res;
-  }
+  });
+  return res;
+}
+
+// fetchMoreInfo monitored
+const monitored = monitor(
+  { name: "REQUEST_moreinfo", help: "moreinfo request" },
+  fetchMoreInfo
 );
 
 /**
@@ -64,7 +67,7 @@ export async function status() {
  */
 async function batchLoader(keys) {
   return await Promise.all(
-    keys.map(async key => await fetchMoreInfo({ pid: key }))
+    keys.map(async key => await monitored({ pid: key }))
   );
 }
 

@@ -7,19 +7,22 @@ import request from "superagent";
 import monitor from "../utils/monitor";
 import { withRedis } from "./redis.datasource";
 
-export const find = monitor(
+async function find({ q }) {
+  return (
+    await request
+      .post("http://simple-search-bibdk-1-0.mi-prod.svc.cloud.dbc.dk/search")
+      .send({
+        q,
+        debug: true,
+        options: { "include-phonetic-creator": false }
+      })
+  ).body;
+}
+
+// find monitored
+const monitored = monitor(
   { name: "REQUEST_simplesearch", help: "simplesearch requests" },
-  async ({ q }) => {
-    return (
-      await request
-        .post("http://simple-search-bibdk-1-0.mi-prod.svc.cloud.dbc.dk/search")
-        .send({
-          q,
-          debug: true,
-          options: { "include-phonetic-creator": false }
-        })
-    ).body;
-  }
+  find
 );
 
 /**
@@ -28,7 +31,7 @@ export const find = monitor(
  * @param {Array.<string>} keys The keys to fetch
  */
 async function batchLoader(keys) {
-  return await Promise.all(keys.map(async key => await find(key)));
+  return await Promise.all(keys.map(async key => await monitored(key)));
 }
 
 /**
