@@ -19,7 +19,6 @@ import DataLoader from "dataloader";
 import config from "./config";
 import howruHandler from "./howru";
 import { metrics, observeDuration, count } from "./utils/monitor";
-import { selectionsToKey } from "./utils/graphqlparser";
 
 const app = express();
 let server;
@@ -34,16 +33,16 @@ promExporterApp.listen(9599, () => {
 (async () => {
   app.use(cors());
 
-  // Middleware that monitors performance of GraphQL queries
+  // Middleware that monitors performance of those GraphQL queries
+  // which specify a monitor name.
   app.use(async (req, res, next) => {
     const start = process.hrtime();
     res.once("finish", () => {
-      // If queryKey is present in req, the query was succesful
-      // and we observe the duration
-      if (req.queryKey) {
+      // monitorName is added to context/req in the monitor resolver
+      if (req.monitorName) {
         const elapsed = process.hrtime(start);
         const seconds = elapsed[0] + elapsed[1] / 1e9;
-        observeDuration(req.queryKey, seconds);
+        observeDuration(req.monitorName, seconds);
       }
     });
     next();
@@ -86,9 +85,7 @@ promExporterApp.listen(9599, () => {
       schema: await schema(),
       graphiql: true,
       extensions: ({ document, context, result }) => {
-        // Create queryKey if query was succesful
         if (document && document.definitions && !result.errors) {
-          context.queryKey = selectionsToKey(document.definitions);
           count("query_success");
         } else {
           count("query_error");

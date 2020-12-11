@@ -1,3 +1,4 @@
+import { log } from "dbc-node-logger";
 import client from "prom-client";
 
 /**
@@ -37,14 +38,17 @@ export default function monitor({ name, help }, func) {
 const histograms = {};
 
 /**
- * Observe a duration for a histogram of some name
+ * Create a histogram for some name
  * If no histogram of the name exists, it will be created
+ * If too many histograms are created, error is thrown
  * @param {string} name
- * @param {number} duration
  */
-export function observeDuration(name, duration) {
+export function createHistogram(name) {
   let hist = histograms[name];
   if (!hist) {
+    if (Object.keys(histograms).length > 99) {
+      throw new Error(`Too many observations created`);
+    }
     hist = new client.Histogram({
       name,
       help: "Histogram for durations",
@@ -52,7 +56,22 @@ export function observeDuration(name, duration) {
     });
     histograms[name] = hist;
   }
-  hist.observe(duration);
+  return hist;
+}
+
+/**
+ * Observe a duration for a histogram of some name
+ * If no histogram of the name exists, it will be created
+ * @param {string} name
+ * @param {number} duration
+ */
+export function observeDuration(name, duration) {
+  try {
+    const hist = createHistogram(name);
+    hist.observe(duration);
+  } catch (e) {
+    log.error(`Could not observe duration for name ${name}: ${e.message}`);
+  }
 }
 
 const counters = {};
