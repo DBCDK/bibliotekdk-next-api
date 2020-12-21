@@ -194,6 +194,9 @@ describe("API test cases", () => {
                   ... on ReviewMatVurd {
                     author
                     date
+                    all {
+                      text
+                    }
                     about {
                       text
                     }

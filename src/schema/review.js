@@ -25,6 +25,7 @@ type ReviewLitteratursiden {
 type ReviewMatVurd {
   author: String!
   date: String!
+  all: [TextWithWork!]!
   about: [TextWithWork!]!
   description: [TextWithWork!]!
   evaluation: [TextWithWork!]!
@@ -120,6 +121,20 @@ export const resolvers = {
   ReviewMatVurd: {
     author: resolveAuthor,
     date: resolveDate,
+    all(parent, args, context, info) {
+      // return all text paragraps in fulltextmatvurd
+      let res = [];
+      getArray(parent, "details.fulltextmatvurd.value").forEach(entry => {
+        Object.values(entry).forEach(item => {
+          if (Array.isArray(item)) {
+            res = [...res, ...item];
+          } else {
+            res.push(item);
+          }
+        });
+      });
+      return res;
+    },
     about(parent, args, context, info) {
       return getArray(parent, "details.fulltextmatvurd.value.about");
     },
