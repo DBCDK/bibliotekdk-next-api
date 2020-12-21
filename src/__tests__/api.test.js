@@ -178,6 +178,36 @@ describe("API test cases", () => {
                   shelf
                 }
                 path
+                reviews {
+                  __typename
+                  ... on ReviewInfomedia {
+                    author
+                    date
+                    media
+                    rating
+                  }
+                  ... on ReviewLitteratursiden {
+                    author
+                    date
+                    url
+                  }
+                  ... on ReviewMatVurd {
+                    author
+                    date
+                    about {
+                      text
+                    }
+                    description {
+                      text
+                    }
+                    evaluation {
+                      text
+                    }
+                    other {
+                      text
+                    }
+                  }
+                }
                 seo {
                   title
                   description
