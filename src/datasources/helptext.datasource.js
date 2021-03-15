@@ -1,7 +1,3 @@
-/**
- * @file This is for the prototype, will likely be deleted soon
- */
-
 import request from "superagent";
 import config from "../config";
 import { createIndexer } from "../utils/searcher";
