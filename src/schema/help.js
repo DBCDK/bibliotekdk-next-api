@@ -6,6 +6,7 @@
 export const typeDef = `
 type HelpRow {
   nid: Int!
+  orgTitle: String!
   title: String!
   body: String!
 }

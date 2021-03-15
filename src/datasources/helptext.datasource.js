@@ -91,6 +91,7 @@ async function search({ q }) {
     });
   }
   result = result.map(entry => ({
+    orgTitle: entry.title,
     title: entry.highlights.title,
     body: entry.highlights.body,
     nid: entry.id
