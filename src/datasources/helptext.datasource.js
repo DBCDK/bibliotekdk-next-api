@@ -92,6 +92,7 @@ async function search({ q }) {
   }
   result = result.map(entry => ({
     orgTitle: entry.title,
+    group: entry.group,
     title: entry.highlights.title,
     body: entry.highlights.body,
     nid: entry.id
