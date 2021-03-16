@@ -57,7 +57,11 @@ const options = {
 };
 
 // Default search options
-const searchOptions = { boost: { title: 2 }, combineWith: "AND", prefix: true };
+const searchOptions = {
+  boost: { title: 100 },
+  combineWith: "AND",
+  prefix: true
+};
 
 // Create index instance
 const index = createIndexer({ options });
