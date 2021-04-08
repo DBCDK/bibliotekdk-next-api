@@ -15,7 +15,7 @@ import simplesearchLoader from "./datasources/simplesearch.datasource";
 import suggesterLoader from "./datasources/suggester.datasource";
 import express from "express";
 import cors from "cors";
-import graphqlHTTP from "express-graphql";
+import { graphqlHTTP } from "express-graphql";
 import DataLoader from "dataloader";
 import config from "./config";
 import howruHandler from "./howru";
