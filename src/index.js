@@ -3,7 +3,7 @@
  *
  */
 import { log } from "dbc-node-logger";
-import schema from "./schema/schema";
+import schema from "./schemaLoader";
 import creatorLoader from "./datasources/creator.datasource";
 import helpTextsLoader from "./datasources/helptext.datasource";
 import workLoader from "./datasources/work.datasource";
