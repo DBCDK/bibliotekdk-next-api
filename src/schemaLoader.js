@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import { makeExecutableSchema, mergeSchemas } from "graphql-tools";
 import drupalSchema from "./schema/external/drupal";
+import { log } from "dbc-node-logger";
 
 /**
  * Get files recursively
@@ -54,6 +55,7 @@ function schemaLoader() {
     const { typeDef, resolvers } = require(file.path);
     if (typeDef) {
       allTypeDefs = [...allTypeDefs, typeDef];
+      log.info(`Found type definition in ${file.path}`);
     }
     if (resolvers) {
       allResolvers = { ...allResolvers, ...resolvers };
