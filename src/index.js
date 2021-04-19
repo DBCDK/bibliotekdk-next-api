@@ -52,7 +52,10 @@ promExporterApp.listen(9599, () => {
 
   // set up context per request
   app.use((req, res, next) => {
-    // user authentication could be done here
+    // Get bearer token from authorization header
+    req.accessToken =
+      req.headers.authorization &&
+      req.headers.authorization.replace(/bearer /i, "");
 
     req.datasources = {
       creator: new DataLoader(creatorLoader),
