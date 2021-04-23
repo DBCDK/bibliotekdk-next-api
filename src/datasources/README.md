@@ -16,4 +16,6 @@ export const options {
 }
 ```
 
-Add howru check to datasource by exporting a createStatusChecker function. Checks are executed when visiting http:localhost:3000/howru.
+Add howru check to datasource by exporting a function named status. Checks are executed when visiting http:localhost:3000/howru.
+
+Override default batch loader by exporting a function named batchLoader.

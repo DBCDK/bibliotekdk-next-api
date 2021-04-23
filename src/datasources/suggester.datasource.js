@@ -15,15 +15,13 @@ export async function load({ q }) {
   return result.body;
 }
 
-export function createStatusChecker(loadFunc) {
-  /**
-   * The status function
-   *
-   * @throws Will throw error if service is down
-   */
-  return async function status() {
-    await loadFunc({ q: "hest" });
-  };
+/**
+ * The status function
+ *
+ * @throws Will throw error if service is down
+ */
+export async function status(loadFunc) {
+  await loadFunc({ q: "hest" });
 }
 
 export const options = {

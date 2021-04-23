@@ -40,15 +40,13 @@ export async function load(pid) {
   return res;
 }
 
-export function createStatusChecker(loadFunc) {
-  /**
-   * The status function
-   *
-   * @throws Will throw error if service is down
-   */
-  return async function status() {
-    await loadFunc("870970-basis:51877330");
-  };
+/**
+ * The status function
+ *
+ * @throws Will throw error if service is down
+ */
+export async function status(loadFunc) {
+  await loadFunc("870970-basis:51877330");
 }
 
 export const options = {

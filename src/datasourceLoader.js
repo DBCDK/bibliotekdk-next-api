@@ -10,12 +10,7 @@ export const datasources = getFilesRecursive("./src/datasources")
     if (!file.path.endsWith(".datasource.js")) {
       return;
     }
-    const {
-      load,
-      options,
-      createBatchLoader,
-      createStatusChecker,
-    } = require(file.path);
+    const { load, options, batchLoader, status } = require(file.path);
     if (!load) {
       return;
     }
@@ -34,25 +29,24 @@ export const datasources = getFilesRecursive("./src/datasources")
 
     // if datasource exports a createBatchLoader we use that,
     // otherwise we use default batch loader
-    let batchLoader = createBatchLoader
-      ? createBatchLoader(monitoredLoad)
+    let monitoredBatchLoader = batchLoader
+      ? (keys) => batchLoader(keys, monitoredLoad)
       : async (keys) => {
           return await Promise.all(keys.map((key) => monitoredLoad(key)));
         };
 
     // Check if Redis is configured for this datasource
     if (options && options.redis && options.redis.prefix && options.redis.ttl) {
-      batchLoader = withRedis(batchLoader, {
+      monitoredBatchLoader = withRedis(monitoredBatchLoader, {
         prefix: options.redis.prefix,
         ttl: options.redis.ttl,
       });
     }
 
-    const statusChecker =
-      createStatusChecker && createStatusChecker(monitoredLoad);
+    const statusChecker = status && (async () => await status(monitoredLoad));
 
     return {
-      batchLoader,
+      batchLoader: monitoredBatchLoader,
       name,
       options,
       statusChecker,
