@@ -1,21 +1,70 @@
 import DataLoader from "dataloader";
 import { log } from "dbc-node-logger";
+import { withRedis } from "./datasources/redis.datasource";
+import monitor from "./utils/monitor";
 import { getFilesRecursive } from "./utils/utils";
 
 // Find all datasources in src/datasources
-const datasources = getFilesRecursive("./src/datasources")
-  .map(
-    (file) =>
-      file.path.endsWith(".datasource.js") &&
-      require(file.path).default && {
-        batchLoader: require(file.path).default,
-        name: file.file.replace(".datasource.js", ""),
-      }
-  )
+export const datasources = getFilesRecursive("./src/datasources")
+  .map((file) => {
+    if (!file.path.endsWith(".datasource.js")) {
+      return;
+    }
+    const {
+      load,
+      options,
+      createBatchLoader,
+      createStatusChecker,
+    } = require(file.path);
+    if (!load) {
+      return;
+    }
+
+    // Extract datasource name from filename
+    const name = file.file.replace(".datasource.js", "");
+
+    // Monitor the load function from the datasource
+    const monitoredLoad = monitor(
+      {
+        name: `REQUEST_${name}`,
+        help: `${name} requests`,
+      },
+      load
+    );
+
+    // if datasource exports a createBatchLoader we use that,
+    // otherwise we use default batch loader
+    let batchLoader = createBatchLoader
+      ? createBatchLoader(monitoredLoad)
+      : async (keys) => {
+          return await Promise.all(keys.map((key) => monitoredLoad(key)));
+        };
+
+    // Check if Redis is configured for this datasource
+    if (options && options.redis && options.redis.prefix && options.redis.ttl) {
+      batchLoader = withRedis(batchLoader, {
+        prefix: options.redis.prefix,
+        ttl: options.redis.ttl,
+      });
+    }
+
+    const statusChecker =
+      createStatusChecker && createStatusChecker(monitoredLoad);
+
+    return {
+      batchLoader,
+      name,
+      options,
+      statusChecker,
+    };
+  })
   .filter((func) => !!func);
 
 log.info(`found ${datasources.length} datasources`, {
-  datasources: datasources.map((datasource) => datasource.name),
+  datasources: datasources.map((datasource) => ({
+    name: datasource.name,
+    options: datasource.options,
+  })),
 });
 
 /**
