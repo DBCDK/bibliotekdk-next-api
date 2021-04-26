@@ -27,7 +27,6 @@ export async function load({ workId }) {
  * @param {Array.<string>} keys The keys to fetch
  */
 export async function batchLoader(keys, loadFunc) {
-  console.log("hep");
   return await Promise.all(
     keys.map(async (key) => {
       try {
