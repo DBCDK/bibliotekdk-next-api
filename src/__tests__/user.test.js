@@ -151,35 +151,3 @@ test("user - get debt", async () => {
   });
   expect(result).toMatchSnapshot();
 });
-
-// agency(language: da) {
-//   branches {
-//     openingHours
-//     name
-//   }
-// }
-// loans {
-//   manifestation {
-//     title
-//   }
-// }
-// orders {
-//   orderId
-//   status
-//   pickUpExpiryDate
-//   orderDate
-//   manifestation {
-//     pid
-//     availability {
-//       willLend
-//     }
-//   }
-// }
-// debt {
-//   amount
-//   creator
-//   currency
-//   date
-//   title
-// }
-// }
