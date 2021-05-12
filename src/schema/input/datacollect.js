@@ -19,7 +19,7 @@ export const typeDef = `
     session_id: String!
   }
   input DataCollectRecommenderClickInput {
-    recommender_like: String!
+    recommender_based_on: String!
     recommender_click_hit: Int!
     recommender_click_work: String!
     recommender_click_reader: String!
