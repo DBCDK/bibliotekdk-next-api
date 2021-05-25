@@ -13,6 +13,7 @@ import { getPageDescription } from "../utils/utils";
 export const typeDef = `
   type MaterialType {
     materialType: String!
+    cover: Cover!
     manifestations: [WorkManifestation!]!
   }
   type Work {
@@ -38,6 +39,18 @@ export const typeDef = `
  * uses its default resolver (it looks in parent obj for the field).
  */
 export const resolvers = {
+  MaterialType: {
+    async cover(parent, args, context, info) {
+      const covers = await Promise.all(
+        parent.manifestations.map((manifestation) => {
+          return context.datasources.moreinfo.load(manifestation.id);
+        })
+      );
+      // Find a valid cover.
+      const cover = covers.find((entry) => entry.detail);
+      return cover || {};
+    },
+  },
   Work: {
     async cover(parent, args, context, info) {
       const records = flattenRecords(parent);
