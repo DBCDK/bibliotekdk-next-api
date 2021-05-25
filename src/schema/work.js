@@ -11,6 +11,10 @@ import { getPageDescription } from "../utils/utils";
  * The Work type definition
  */
 export const typeDef = `
+  type MaterialType {
+    materialType: String!
+    manifestations: [WorkManifestation!]!
+  }
   type Work {
     title: String
     fullTitle: String
@@ -19,7 +23,7 @@ export const typeDef = `
     cover: Cover!
     id: String!
     manifestations: [WorkManifestation!]!
-    materialTypes: [WorkManifestation!]!
+    materialTypes: [MaterialType!]!
     path: [String!]!
     reviews: [Review!]!
     series: Series
@@ -129,9 +133,7 @@ function flattenRecords(work) {
 
   // Walk through every record
   primaryRecords.forEach((record) => {
-    record.types.forEach((typeName) => {
-      records.push({ ...record, materialType: typeName });
-    });
+    records.push({ ...record, materialType: record.types.join(" / ") });
   });
 
   return sortBy(records, "materialType");
@@ -168,19 +170,12 @@ function parseMaterialTypes(flattenedRecords) {
   // Lets have the type names sorted (keys of materialTypes)
   const typeNames = sortBy(Object.keys(materialTypes));
 
-  // Walk through every type name
-  typeNames.forEach((typeName) => {
-    // And sort array of manifestations for this specific type
-    materialTypes[typeName] = sortBy(materialTypes[typeName], (record) => {
-      // For now we have 870970 first in the array
-      if (record.id.startsWith("870970-basis")) {
-        return -1;
-      }
-      return 0;
-    });
-  });
-
   // Finally, we return array of types
   // One record per array type
-  return typeNames.map((typeName) => materialTypes[typeName][0]);
+  return Object.entries(materialTypes).map(
+    ([materialType, manifestations]) => ({
+      materialType,
+      manifestations,
+    })
+  );
 }
