@@ -43,7 +43,6 @@ test("library - get branches for agency", async () => {
                 postalCode
                 city
                 pickupAllowed
-                
             }
           }
         `,
