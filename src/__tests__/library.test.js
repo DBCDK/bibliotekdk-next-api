@@ -38,10 +38,12 @@ test("library - get branches for agency", async () => {
                 branchId
                 name
                 openingHours
+                orderParameters
                 postalAddress
                 postalCode
                 city
                 pickupAllowed
+                
             }
           }
         `,
@@ -61,6 +63,7 @@ test("library - get all", async () => {
                 branchId
                 name
                 openingHours
+                orderParameters
                 postalAddress
                 postalCode
                 city
