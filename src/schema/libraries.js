@@ -11,7 +11,6 @@ export const typeDef = `
     userId
     barcode
     cardno
-    pincode
     customId
     userDateOfBirth
     userName
@@ -161,7 +160,6 @@ export const resolvers = {
         barcode: 2,
         cardno: 3,
         customId: 4,
-        pincode: 5,
         userName: 6,
         userDateOfBirth: 7,
         userAddress: 8,
