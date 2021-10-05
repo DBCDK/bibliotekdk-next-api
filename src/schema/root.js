@@ -141,7 +141,6 @@ export const resolvers = {
       return await context.datasources.submitOrder.load(input);
     },
     async submitSession(parent, args, context, info) {
-      console.log("heeep", args);
       await context.datasources.submitSession.load({
         accessToken: context.accessToken,
         session: args.input,
