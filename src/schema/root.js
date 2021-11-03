@@ -23,6 +23,8 @@ type Query {
   borchk(libraryCode: String!, userId: String!, userPincode: String!): BorchkRequestStatus!
   infomediaContent(pid: String!): [InfomediaContent]
   session: Session
+  dbpedia(wikiDataId: String!): dbPedia
+  wikidata(wikiDataId: String!): wikiData
 }
 
 type Mutation {
@@ -37,6 +39,18 @@ type Mutation {
  */
 export const resolvers = {
   Query: {
+    async dbpedia(parent, args, context, info) {
+      return {...args}
+    },
+
+    async wikidata(parent, args, context, info) {
+      const {bindings} = await context.datasources.wikidata.load("Q202693");
+
+      console.log(bindings, "BINDING");
+
+      return {...bindings[0]}
+    },
+
     async manifestation(parent, args, context, info) {
       return { id: args.pid };
     },

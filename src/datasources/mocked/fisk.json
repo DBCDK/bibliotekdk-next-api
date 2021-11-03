@@ -1,0 +1,34 @@
+[
+  {
+    "onlineAccess": {
+      "onlineAccess": [
+        {
+          "value": {
+            "link": {
+              "$": "https://ereolen.dk/ting/object/870970-basis:52552478"
+            },
+            "note": {
+              "$": "Adgang til lu00e5n hos eReolen.dk"
+            }
+          },
+          "accessUrlDisplay": {
+            "$": "urlEreolen"
+          }
+        },
+        {
+          "value": {
+            "link": {
+              "$": "https://ereolengo.dk/ting/object/870970-basis:52552478"
+            },
+            "note": {
+              "$": "Adgang til titlen pu00e5 eReolen Go"
+            }
+          },
+          "accessUrlDisplay": {
+            "$": "urlEreolen"
+          }
+        }
+      ]
+    }
+  }
+]
