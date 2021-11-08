@@ -27,8 +27,6 @@ export async function load({ q, filters, limit = 10, offset = 0 }) {
   // do the request
   const response = (await request.post(url).send(query)).body;
 
-  console.log(response, query);
-
   // Get hitcount
   const hitcount = response.hits;
 
