@@ -5,6 +5,7 @@
 
 import { log } from "dbc-node-logger";
 import { createHistogram } from "../utils/monitor";
+import { parseOnlineAccess } from "../utils/utils";
 
 /**
  * The root type definitions
@@ -29,6 +30,7 @@ type Query {
 
 type Mutation {
   data_collect(input: DataCollectInput!): String!
+  submitDigitalCopyArticleOrder(input: DigitalCopyOrderArticle!): DigitalCopyResponse!
   submitOrder(input: SubmitOrderInput!): SubmitOrder
   submitSession(input: SessionInput!): String!
   deleteSession: String!
@@ -138,6 +140,74 @@ export const resolvers = {
       log.info("data", { type: "data", message: JSON.stringify(data) });
 
       return "OK";
+    },
+    async submitDigitalCopyArticleOrder(parent, args, context, info) {
+      // User must be logged in at agency
+      if (!context.smaug || !context.smaug.user || !context.smaug.user.id) {
+        return {
+          status: "ERROR_UNAUTHORIZED_USER",
+        };
+      }
+
+      const agencyId = context.smaug.user.agency;
+
+      // Validate the pickup branch, branch must exist and be part
+      // of the agency in which the user logged in
+      const branch = (
+        await context.datasources.library.load({
+          branchId: args.input.pickUpBranch,
+        })
+      ).result[0];
+      if (!branch || branch.agencyId !== agencyId) {
+        return {
+          status: "ERROR_INVALID_PICKUP_BRANCH",
+        };
+      }
+
+      // Agency must be subscribed
+      const subscriptions = await context.datasources.statsbiblioteketSubscribers.load(
+        ""
+      );
+      if (!subscriptions[agencyId]) {
+        return {
+          status: "ERROR_AGENCY_NOT_SUBSCRIBED",
+        };
+      }
+
+      // Pid must be a manifestation with a valid issn (valid journal)
+      let issn;
+      try {
+        const onlineAccess = await parseOnlineAccess(args.input.pid, context);
+        issn = onlineAccess.find((entry) => entry.issn);
+      } catch (e) {
+        return {
+          status: "ERROR_PID_NOT_RESERVABLE",
+        };
+      }
+      if (!issn) {
+        return {
+          status: "ERROR_PID_NOT_RESERVABLE",
+        };
+      }
+
+      // Then send order
+      const user = await context.datasources.user.load({
+        accessToken: context.accessToken,
+      });
+
+      try {
+        await context.datasources.statsbiblioteketSubmitArticleOrder.load({
+          ...args.input,
+          smaug: context.smaug,
+          user,
+        });
+        return { status: "OK" };
+      } catch (e) {
+        console.log(e.response);
+        return {
+          status: "ERROR_PID_NOT_RESERVABLE",
+        };
+      }
     },
     async submitOrder(parent, args, context, info) {
       const input = {

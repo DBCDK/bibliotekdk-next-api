@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DigitalCopy, agency not subscribed should give error 1`] = `
+Object {
+  "data": Object {
+    "submitDigitalCopyArticleOrder": Object {
+      "status": "ERROR_AGENCY_NOT_SUBSCRIBED",
+    },
+  },
+}
+`;
+
+exports[`DigitalCopy, manifestation not part of statsbibliotek journal should give error 1`] = `
+Object {
+  "data": Object {
+    "submitDigitalCopyArticleOrder": Object {
+      "status": "ERROR_PID_NOT_RESERVABLE",
+    },
+  },
+}
+`;
+
+exports[`DigitalCopy, order success 1`] = `
+Object {
+  "data": Object {
+    "submitDigitalCopyArticleOrder": Object {
+      "status": "OK",
+    },
+  },
+}
+`;
+
+exports[`DigitalCopy, unauthorized user should give error 1`] = `
+Object {
+  "data": Object {
+    "submitDigitalCopyArticleOrder": Object {
+      "status": "ERROR_UNAUTHORIZED_USER",
+    },
+  },
+}
+`;
+
+exports[`DigitalCopy, unknown pickupBranch should give error 1`] = `
+Object {
+  "data": Object {
+    "submitDigitalCopyArticleOrder": Object {
+      "status": "ERROR_INVALID_PICKUP_BRANCH",
+    },
+  },
+}
+`;
