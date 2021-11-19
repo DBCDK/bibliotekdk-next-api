@@ -40,8 +40,6 @@ export async function load({ pid, pickUpBranch, user }) {
   });
   const endpoint = `${url}/elba-webservices/services/placecopyrequest`;
 
-  console.log(endpoint, requestString);
-  return { status: "OK" };
   const res = await request
     .post(endpoint)
     .set("Content-Type", "application/xml")
