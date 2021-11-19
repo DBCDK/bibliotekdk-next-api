@@ -4,7 +4,7 @@ import config from "../config";
 
 const { url, user, password } = config.datasources.statsbiblioteket;
 
-function createSoapRequest({
+function createRequestString({
   pid,
   pickUpBranch,
   userId,
@@ -12,21 +12,16 @@ function createSoapRequest({
   userMail,
   agencyId,
 }) {
-  return `<SOAP-ENV:Envelope xmlns="http://statsbiblioteket.dk/xws/elba-placecopyrequest-schema" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-  <SOAP-ENV:Body>
-    <placeCopyRequest>
-      <ws_user>${user}</ws_user>
-      <ws_password>${password}</ws_password>
-      <pid>${pid}</pid>
-      <user_loaner_id>${userId}</user_loaner_id>
-      <userName>${userName}</userName>
-      <userMail>${userMail}</userMail>
-      <user_interest_date>${createNeedBeforeDate()}</user_interest_date>
-      <pickupAgencyId>${pickUpBranch}</pickupAgencyId>
-      <agencyId>${agencyId}</agencyId>
-    </placeCopyRequest>
-  </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>`;
+  return `<?xml version="1.0"?>
+  <placeCopyRequest>
+    <ws_user>${user}</ws_user>
+    <ws_password>${password}</ws_password>
+    <pid>${pid}</pid>
+    <agencyId>${agencyId}</agencyId>
+    <pickupAgencyId>${pickUpBranch}</pickupAgencyId>
+    <userName>${userName}</userName>
+    <userMail>${userMail}</userMail>
+  </placeCopyRequest>`;
 }
 
 /**
@@ -49,7 +44,7 @@ function createNeedBeforeDate() {
  */
 export async function load({ pid, pickUpBranch, smaug, user }) {
   const smaugUser = smaug.user;
-  const soap = createSoapRequest({
+  const requestString = createRequestString({
     pid,
     pickUpBranch,
     userId: smaugUser.id,
@@ -59,13 +54,13 @@ export async function load({ pid, pickUpBranch, smaug, user }) {
   });
   const endpoint = `${url}/elba-webservices/services/placecopyrequest`;
 
-  // console.log(endpoint, soap);
+  console.log(endpoint, requestString);
 
-  // TODO - make this work- server responds with 415 (wrong content type)
+  // TODO - make this work- server responds with 400
   const res = await request
     .post(endpoint)
-    .set("Content-Type", "text/xml")
-    .send(soap);
+    .set("Content-Type", "application/xml")
+    .send(requestString);
 
   return res;
 }
