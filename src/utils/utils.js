@@ -148,7 +148,7 @@ export function getInfomediaDetails(article) {
   return details;
 }
 
-export async function parseOnlineAccess(pid, context) {
+export async function resolveOnlineAccess(pid, context) {
   const result = [];
 
   // Get onlineAccess from openformat (UrlReferences)

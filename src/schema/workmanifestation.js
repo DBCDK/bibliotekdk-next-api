@@ -3,7 +3,7 @@
  *
  */
 
-import { getArray, parseOnlineAccess } from "../utils/utils";
+import { getArray, resolveOnlineAccess } from "../utils/utils";
 import dayjs from "dayjs";
 
 /**
@@ -217,7 +217,7 @@ export const resolvers = {
       );
     },
     async onlineAccess(parent, args, context, info) {
-      return parseOnlineAccess(parent.id, context);
+      return resolveOnlineAccess(parent.id, context);
     },
     async originals(parent, args, context, info) {
       if (parent.originals) {

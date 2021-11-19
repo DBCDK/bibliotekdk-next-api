@@ -7,13 +7,13 @@ export async function performTestQuery({ query, variables, context }) {
 }
 
 const query = `
-mutation($input: DigitalCopyOrderArticle!) {
-  submitDigitalCopyArticleOrder(input: $input) {
+mutation($input: PeriodicaArticleOrder!) {
+  submitPeriodicaArticleOrder(input: $input) {
     status
   }
 }    
 `;
-test("DigitalCopy, unauthorized user should give error", async () => {
+test("PeriodicaArticleOrder, unauthorized user should give error", async () => {
   const result = await performTestQuery({
     query,
     variables: {
@@ -29,7 +29,7 @@ test("DigitalCopy, unauthorized user should give error", async () => {
   expect(result).toMatchSnapshot();
 });
 
-test("DigitalCopy, unknown pickupBranch should give error", async () => {
+test("PeriodicaArticleOrder, unknown pickupBranch should give error", async () => {
   const result = await performTestQuery({
     query,
     variables: {
@@ -48,7 +48,7 @@ test("DigitalCopy, unknown pickupBranch should give error", async () => {
   expect(result).toMatchSnapshot();
 });
 
-test("DigitalCopy, agency not subscribed should give error", async () => {
+test("PeriodicaArticleOrder, agency not subscribed should give error", async () => {
   const result = await performTestQuery({
     query,
     variables: {
@@ -67,7 +67,7 @@ test("DigitalCopy, agency not subscribed should give error", async () => {
   expect(result).toMatchSnapshot();
 });
 
-test("DigitalCopy, manifestation not part of statsbibliotek journal should give error", async () => {
+test("PeriodicaArticleOrder, manifestation not part of statsbibliotek journal should give error", async () => {
   const result = await performTestQuery({
     query,
     variables: {
@@ -86,7 +86,7 @@ test("DigitalCopy, manifestation not part of statsbibliotek journal should give 
   expect(result).toMatchSnapshot();
 });
 
-test("DigitalCopy, order success", async () => {
+test("PeriodicaArticleOrder, order success", async () => {
   const result = await performTestQuery({
     query,
     variables: {

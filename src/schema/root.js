@@ -5,7 +5,7 @@
 
 import { log } from "dbc-node-logger";
 import { createHistogram } from "../utils/monitor";
-import { parseOnlineAccess } from "../utils/utils";
+import { resolveOnlineAccess } from "../utils/utils";
 
 /**
  * The root type definitions
@@ -30,7 +30,7 @@ type Query {
 
 type Mutation {
   data_collect(input: DataCollectInput!): String!
-  submitDigitalCopyArticleOrder(input: DigitalCopyOrderArticle!): DigitalCopyResponse!
+  submitPeriodicaArticleOrder(input: PeriodicaArticleOrder!): PeriodicaArticleOrderResponse!
   submitOrder(input: SubmitOrderInput!): SubmitOrder
   submitSession(input: SessionInput!): String!
   deleteSession: String!
@@ -141,7 +141,7 @@ export const resolvers = {
 
       return "OK";
     },
-    async submitDigitalCopyArticleOrder(parent, args, context, info) {
+    async submitPeriodicaArticleOrder(parent, args, context, info) {
       // User must be logged in at agency
       if (!context.smaug || !context.smaug.user || !context.smaug.user.id) {
         return {
@@ -177,7 +177,7 @@ export const resolvers = {
       // Pid must be a manifestation with a valid issn (valid journal)
       let issn;
       try {
-        const onlineAccess = await parseOnlineAccess(args.input.pid, context);
+        const onlineAccess = await resolveOnlineAccess(args.input.pid, context);
         issn = onlineAccess.find((entry) => entry.issn);
       } catch (e) {
         return {
@@ -190,20 +190,24 @@ export const resolvers = {
         };
       }
 
-      // Then send order
+      // We need users name and email
       const user = await context.datasources.user.load({
         accessToken: context.accessToken,
       });
 
+      // Then send order
       try {
         await context.datasources.statsbiblioteketSubmitArticleOrder.load({
           ...args.input,
-          smaug: context.smaug,
           user,
+        });
+        log.info("Periodica article order succes", {
+          args,
+          accessToken: context.accessToken,
         });
         return { status: "OK" };
       } catch (e) {
-        console.log(e.response);
+        log.error("Periodica article order failed", e);
         return {
           status: "ERROR_PID_NOT_RESERVABLE",
         };
