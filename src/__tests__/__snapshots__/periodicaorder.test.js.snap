@@ -30,6 +30,16 @@ Object {
 }
 `;
 
+exports[`PeriodicaArticleOrder, order when agency has no borrowerCheck 1`] = `
+Object {
+  "data": Object {
+    "submitPeriodicaArticleOrder": Object {
+      "status": "OK",
+    },
+  },
+}
+`;
+
 exports[`PeriodicaArticleOrder, unauthorized user should give error 1`] = `
 Object {
   "data": Object {

@@ -10,6 +10,8 @@ export const typeDef = `
    """
    pid: String! 
    pickUpBranch: String!
+   userName: String
+   userMail: String
  }
  enum PeriodicaArticleOrderStatus {
    OK

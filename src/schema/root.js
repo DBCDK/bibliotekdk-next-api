@@ -5,7 +5,7 @@
 
 import { log } from "dbc-node-logger";
 import { createHistogram } from "../utils/monitor";
-import { resolveOnlineAccess } from "../utils/utils";
+import { resolveBorrowerCheck, resolveOnlineAccess } from "../utils/utils";
 
 /**
  * The root type definitions
@@ -142,25 +142,51 @@ export const resolvers = {
       return "OK";
     },
     async submitPeriodicaArticleOrder(parent, args, context, info) {
-      // User must be logged in at agency
-      if (!context.smaug || !context.smaug.user || !context.smaug.user.id) {
-        return {
-          status: "ERROR_UNAUTHORIZED_USER",
-        };
-      }
+      let { pid, pickUpBranch, userName, userMail } = args.input;
 
-      const agencyId = context.smaug.user.agency;
-
-      // Validate the pickup branch, branch must exist and be part
-      // of the agency in which the user logged in
+      // Fetch and check existence of branch
       const branch = (
         await context.datasources.library.load({
           branchId: args.input.pickUpBranch,
         })
       ).result[0];
-      if (!branch || branch.agencyId !== agencyId) {
+
+      if (!branch) {
         return {
           status: "ERROR_INVALID_PICKUP_BRANCH",
+        };
+      }
+
+      const hasBorrowerCheck = await resolveBorrowerCheck(
+        branch.agencyId,
+        context
+      );
+
+      // If branch has borrowerCheck, we require the user to be authenticated via that agency
+      if (hasBorrowerCheck) {
+        if (!context.smaug || !context.smaug.user || !context.smaug.user.id) {
+          return {
+            status: "ERROR_UNAUTHORIZED_USER",
+          };
+        }
+        const agencyId = context.smaug.user.agency;
+        if (branch.agencyId !== agencyId) {
+          return {
+            status: "ERROR_INVALID_PICKUP_BRANCH",
+          };
+        }
+
+        // We need users name and email
+        const user = await context.datasources.user.load({
+          accessToken: context.accessToken,
+        });
+        userName = user.name ? user.name : userMail;
+        userMail = user.mail ? user.mail : userMail;
+      }
+
+      if (!userName || !userMail) {
+        return {
+          status: "ERROR_UNAUTHORIZED_USER",
         };
       }
 
@@ -168,7 +194,7 @@ export const resolvers = {
       const subscriptions = await context.datasources.statsbiblioteketSubscribers.load(
         ""
       );
-      if (!subscriptions[agencyId]) {
+      if (!subscriptions[branch.agencyId]) {
         return {
           status: "ERROR_AGENCY_NOT_SUBSCRIBED",
         };
@@ -190,16 +216,14 @@ export const resolvers = {
         };
       }
 
-      // We need users name and email
-      const user = await context.datasources.user.load({
-        accessToken: context.accessToken,
-      });
-
       // Then send order
       try {
         await context.datasources.statsbiblioteketSubmitArticleOrder.load({
-          ...args.input,
-          user,
+          pid,
+          pickUpBranch,
+          userName,
+          userMail,
+          agencyId: branch.agencyId,
         });
         log.info("Periodica article order succes", {
           args,

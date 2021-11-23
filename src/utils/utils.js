@@ -148,6 +148,22 @@ export function getInfomediaDetails(article) {
   return details;
 }
 
+export async function resolveBorrowerCheck(agencyId, context) {
+  // returns true if login.bib.dk is supported
+  if (!agencyId) {
+    return false;
+  }
+  const res = await context.datasources.vipcore_UserOrderParameters.load(
+    agencyId
+  );
+  if (res.agencyParameters && res.agencyParameters.borrowerCheckParameters) {
+    return !!res.agencyParameters.borrowerCheckParameters.find(
+      ({ borrowerCheckSystem, borrowerCheck }) =>
+        borrowerCheckSystem === "login.bib.dk" && borrowerCheck
+    );
+  }
+  return false;
+}
 export async function resolveOnlineAccess(pid, context) {
   const result = [];
 

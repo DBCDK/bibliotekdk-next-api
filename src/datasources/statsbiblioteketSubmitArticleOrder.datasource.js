@@ -30,13 +30,19 @@ function createRequestString({
  * @param {string} params.pickUpBranch
  * @param {object} params.user
  */
-export async function load({ pid, pickUpBranch, user }) {
+export async function load({
+  pid,
+  pickUpBranch,
+  userName,
+  userMail,
+  agencyId,
+}) {
   const requestString = createRequestString({
     pid,
     pickUpBranch,
-    userName: user.name,
-    userMail: user.mail,
-    agencyId: user.agency,
+    userName,
+    userMail,
+    agencyId,
   });
   const endpoint = `${url}/elba-webservices/services/placecopyrequest`;
 
