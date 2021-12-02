@@ -43,6 +43,11 @@ const searchOptions = {
   prefix: true,
 };
 
+// exclude branches - set this to false if you do NOT want to filter
+// out branches
+const excludeBranches = true;
+const filters = { temporarilyClosed: false, pickupAllowed: true };
+
 // We cache the docs for 30 minutes
 let branches;
 let branchesMap;
@@ -82,7 +87,6 @@ export async function search(props, getFunc) {
     agencyid,
     language = "da",
     branchId,
-    excludeBranches = false,
   } = props;
 
   const age = lastUpdateMS ? new Date().getTime() - lastUpdateMS : 0;
@@ -101,6 +105,16 @@ export async function search(props, getFunc) {
           name: branch.branchName,
         }));
 
+        if (excludeBranches) {
+          const filtered = branches.filter(function (item) {
+            for (let key in filters) {
+              if (item[key] === filters[key]) return true;
+            }
+            return false;
+          });
+          branches = filtered;
+        }
+
         branchesMap = {};
         branches.forEach((branch) => (branchesMap[branch.id] = branch));
 
@@ -113,17 +127,6 @@ export async function search(props, getFunc) {
   }
 
   let result = branches;
-
-  if (excludeBranches) {
-    const filters = { temporarilyClosed: false, pickupAllowed: true };
-    const filtered = result.filter(function (item) {
-      for (let key in filters) {
-        if (item[key] === filters[key]) return true;
-      }
-      return false;
-    });
-    result = filtered;
-  }
 
   if (q) {
     // prefix match

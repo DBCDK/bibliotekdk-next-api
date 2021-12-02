@@ -20,7 +20,7 @@ type Query {
   search(q: SearchQuery!, filters: SearchFilters): SearchResponse!
   suggest(q: String!, worktype: WorkType): SuggestResponse!
   help(q: String!, language: LanguageCode): HelpResponse
-  branches(agencyid: String, branchId: String, language: LanguageCode, q: String, offset: Int, limit: PaginationLimit, excludeBranches: Boolean): BranchResult!
+  branches(agencyid: String, branchId: String, language: LanguageCode, q: String, offset: Int, limit: PaginationLimit): BranchResult!
   deleteOrder(orderId: String!, orderType: OrderType!): SubmitOrder
   borchk(libraryCode: String!, userId: String!, userPincode: String!): BorchkRequestStatus!
   infomediaContent(pid: String!): [InfomediaContent]
@@ -180,7 +180,6 @@ export const resolvers = {
         language: args.language,
         agencyid: args.agencyid,
         branchId: args.branchId,
-        excludeBranches: args.excludeBranches,
       });
     },
     async suggest(parent, args, context, info) {
