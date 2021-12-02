@@ -82,6 +82,7 @@ export async function search(props, getFunc) {
     agencyid,
     language = "da",
     branchId,
+    excludeBranches = false,
   } = props;
 
   const age = lastUpdateMS ? new Date().getTime() - lastUpdateMS : 0;
@@ -112,6 +113,17 @@ export async function search(props, getFunc) {
   }
 
   let result = branches;
+
+  if (excludeBranches) {
+    const filters = { temporarilyClosed: false, pickupAllowed: true };
+    const filtered = result.filter(function (item) {
+      for (let key in filters) {
+        if (item[key] === filters[key]) return true;
+      }
+      return false;
+    });
+    result = filtered;
+  }
 
   if (q) {
     // prefix match
