@@ -22,11 +22,20 @@
  */
 
 import { graphql } from "graphql";
-import { internalSchema } from "../schemaLoader";
+import { getExecutableSchema } from "../schemaLoader";
 import { createMockedDataLoaders } from "../datasourceLoader";
 
 export async function performTestQuery({ query, variables, context }) {
-  return graphql(internalSchema, query, null, context, variables);
+  return graphql(
+    await getExecutableSchema({
+      loadExternal: false,
+      clientPermissions: { admin: true },
+    }),
+    query,
+    null,
+    context,
+    variables
+  );
 }
 
 test("localizations - get for a number of pids", async () => {

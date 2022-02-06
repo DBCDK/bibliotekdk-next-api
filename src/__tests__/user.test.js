@@ -2,11 +2,20 @@ import mockedLibrary from "../datasources/mocked/library.datasource.mocked";
 import mockedUser from "../datasources/mocked/user.datasource.mocked";
 
 import { graphql } from "graphql";
-import { internalSchema } from "../schemaLoader";
+import { getExecutableSchema } from "../schemaLoader";
 import { createMockedDataLoaders } from "../datasourceLoader";
 
 export async function performTestQuery({ query, variables, context }) {
-  return graphql(internalSchema, query, null, context, variables);
+  return graphql(
+    await getExecutableSchema({
+      loadExternal: false,
+      clientPermissions: { admin: true },
+    }),
+    query,
+    null,
+    context,
+    variables
+  );
 }
 
 test("user - get basic data", async () => {

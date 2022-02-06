@@ -3,7 +3,7 @@
  *
  */
 import { log } from "dbc-node-logger";
-import schema from "./schemaLoader";
+import { getExecutableSchema } from "./schemaLoader";
 import express from "express";
 import cors from "cors";
 import { graphqlHTTP } from "express-graphql";
@@ -78,32 +78,6 @@ promExporterApp.listen(9599, () => {
     });
   }
 
-  let resolvedSchema;
-  (async () => {
-    try {
-      resolvedSchema = await schema();
-
-      // We wrap every resolver with a function that log errors
-      wrapResolvers(resolvedSchema, (resolveFn) => {
-        async function errorLogger(...args) {
-          const result = await resolveFn(...args);
-          if (result instanceof Error) {
-            log.error(result.message, {
-              error: String(result),
-              stacktrace: result.stack,
-            });
-          }
-          return result;
-        }
-
-        return errorLogger;
-      });
-    } catch (e) {
-      log.error("Could not create schema, shutting down", e);
-      process.exit(1);
-    }
-  })();
-
   // Setup route handler for GraphQL
   app.use(
     "/graphql",
@@ -134,7 +108,9 @@ promExporterApp.listen(9599, () => {
       }
 
       return {
-        schema: resolvedSchema,
+        schema: await getExecutableSchema({
+          clientPermissions: request?.smaug?.gateway,
+        }),
         graphiql: { headerEditorEnabled: true, shouldPersistHeaders: true },
         extensions: ({ document, context, result }) => {
           if (document && document.definitions && !result.errors) {

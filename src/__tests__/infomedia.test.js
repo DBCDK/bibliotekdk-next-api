@@ -1,11 +1,20 @@
 import { graphql } from "graphql";
 import { validate } from "graphql/validation";
 import { parse } from "graphql/language";
-import { internalSchema } from "../schemaLoader";
+import { getExecutableSchema } from "../schemaLoader";
 import { createMockedDataLoaders } from "../datasourceLoader";
 
 export async function performTestQuery({ query, variables, context }) {
-  return graphql(internalSchema, query, null, context, variables);
+  return graphql(
+    await getExecutableSchema({
+      loadExternal: false,
+      clientPermissions: { admin: true },
+    }),
+    query,
+    null,
+    context,
+    variables
+  );
 }
 
 test("InfomediaContent, 2 articles", async () => {
