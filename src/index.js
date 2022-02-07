@@ -133,7 +133,7 @@ promExporterApp.listen(9599, () => {
 
             // If this is not the introspection query,
             // a valid token is required
-            if (!isIntrospectionQuery(ast) && !request.smaug) {
+            if (!request.smaug && !isIntrospectionQuery(ast)) {
               throw "Unauthorized";
             }
 
