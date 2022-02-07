@@ -60,7 +60,7 @@ function schemaLoader() {
   let allResolvers = { ...scalarResolvers };
 
   // Load files in schema folder
-  const files = getFilesRecursive("./src/schema");
+  const files = getFilesRecursive(`${__dirname}/schema`);
 
   // Require typeDefs and resolvers
   files.forEach((file) => {

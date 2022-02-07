@@ -1,27 +1,10 @@
-import mockedLibrary from "../datasources/mocked/library.datasource.mocked";
-import mockedUser from "../datasources/mocked/user.datasource.mocked";
-
-import { graphql } from "graphql";
-import { getExecutableSchema } from "../schemaLoader";
 import { createMockedDataLoaders } from "../datasourceLoader";
-
-export async function performTestQuery({ query, variables, context }) {
-  return graphql(
-    await getExecutableSchema({
-      loadExternal: false,
-      clientPermissions: { admin: true },
-    }),
-    query,
-    null,
-    context,
-    variables
-  );
-}
+import { performTestQuery } from "../utils/utils";
 
 test("user - get basic data", async () => {
   const result = await performTestQuery({
     query: `
-            query  {
+            query {
               user {
                 name
                 address

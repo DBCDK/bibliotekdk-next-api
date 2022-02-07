@@ -1,7 +1,7 @@
-import { graphql } from "graphql";
-import { getExecutableSchema } from "../schemaLoader";
 import { createMockedDataLoaders } from "../datasourceLoader";
 import { printSchema, buildClientSchema } from "graphql";
+import { performTestQuery } from "../utils/utils";
+import permissions from "../permissions.json";
 
 const introspectionQuery = `
 query IntrospectionQuery {
@@ -99,24 +99,6 @@ fragment TypeRef on __Type {
 }
 `;
 
-export async function performTestQuery({
-  query,
-  variables,
-  context,
-  clientPermissions,
-}) {
-  return graphql(
-    await getExecutableSchema({
-      loadExternal: false,
-      clientPermissions,
-    }),
-    query,
-    null,
-    context,
-    variables
-  );
-}
-
 test("limited access to root fields", async () => {
   const result = await performTestQuery({
     query: introspectionQuery,
@@ -156,6 +138,7 @@ test("default schema transform", async () => {
       datasources: createMockedDataLoaders(),
       accessToken: "DUMMY_TOKEN",
     },
+    clientPermissions: permissions.default,
   });
 
   expect(printSchema(buildClientSchema(result.data))).toMatchSnapshot();
