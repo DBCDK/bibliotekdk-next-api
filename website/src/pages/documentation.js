@@ -12,21 +12,6 @@ import useDocuments from "@/hooks/useDocuments";
 import useStorage from "@/hooks/useStorage";
 import { InlineGraphiQL } from "@/components/graphiql/GraphiQL";
 
-function Test({ query }) {
-  return (
-    <div
-      style={{
-        background: "lightgrey",
-        padding: 16,
-        marginTop: 16,
-        marginBottom: 16,
-      }}
-    >
-      <div>Query: {query}</div>
-      <div>Found: some stuff</div>
-    </div>
-  );
-}
 const components = {
   h1: ({ children }) => (
     <Title type="title3" tag="h1" style={{ marginTop: 40 }}>
