@@ -4,15 +4,19 @@
 
 import request from "superagent";
 import config from "../config";
+const { agencyId: agency, name: profile } = config.profile;
 
 const { url, prefix, ttl, token } = config.datasources.facets;
 
 export async function load({ q, filters, facets = [] }) {
+  console.log("facets", url, agency, profile);
   // get parsed arguments for query
   // static parameters for the search
   const statics = {
     "access-token": token,
     debug: false,
+    agency,
+    profile,
   };
 
   // merge variables and statics
