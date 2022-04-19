@@ -4,6 +4,12 @@ import History from "@/components/history";
 
 import styles from "./TokenStatus.module.css";
 
+/**
+ * A component indicating the client, profile, and agency
+ * of the selected token.
+ *
+ * @returns {component}
+ */
 export default function TokenStatus() {
   const { selectedToken } = useStorage();
   const { configuration, isLoading: configurationIsLoading } = useConfiguration(
