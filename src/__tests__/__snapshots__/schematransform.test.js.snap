@@ -672,7 +672,10 @@ type Draft_DigitalArticleService {
 union Draft_Access = Draft_URL | Draft_Ereol | Draft_Ill | Draft_InfomediaService | Draft_DigitalArticleService
 
 type Draft_Query {
-  work(id: String, faust: String): Draft_Work
+  work(id: String, faust: String, pid: String): Draft_Work
+  works(id: [String!], faust: [String!], pid: [String!]): [Draft_Work]!
+  manifestation(faust: String, pid: String): Draft_Manifestation
+  manifestations(faust: [String!], pid: [String!]): [Draft_Manifestation]!
 }
 
 type Query {

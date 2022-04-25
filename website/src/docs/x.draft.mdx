@@ -23,9 +23,9 @@ For the time being, expect fake data to be returned.
       abstract
       creators {
         __typename
+        display
+        nameSort
         ... on Draft_Person {
-          display
-          nameSort
           firstName
           lastName
           birthYear
@@ -43,8 +43,6 @@ For the time being, expect fake data to be returned.
           }
         }
         ... on Draft_Corporation {
-          display
-          nameSort
           main
           sub
           location
@@ -98,22 +96,20 @@ For the time being, expect fake data to be returned.
         title
       }
       subjects {
-        __typename
-        ... on Draft_SubjectText {
-          type
+        all {
+          __typename
           display
-        }
-        ... on Draft_TimePeriod {
-          period {
-            begin
-            end
-            display
+          ... on Draft_SubjectText {
+            type
+          }
+          ... on Draft_TimePeriod {
+            period {
+              begin
+              end
+            }
           }
         }
-        ... on Draft_Person {
-          display
-        }
-        ... on Draft_Corporation {
+        dbcVerified {
           display
         }
       }
