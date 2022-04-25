@@ -53,7 +53,7 @@ type Draft_Role {
   function: Draft_Translation!
 }
 
-type Draft_Person {
+type Draft_Person implements Draft_Subject & Draft_Creator {
   \\"\\"\\"The person's whole name in normal order\\"\\"\\"
   display: String!
 
@@ -84,7 +84,7 @@ type Draft_Person {
   roles: [Draft_Role!]!
 }
 
-type Draft_Corporation {
+type Draft_Corporation implements Draft_Subject & Draft_Creator {
   \\"\\"\\"The full corporation or conference name\\"\\"\\"
   display: String!
 
@@ -119,7 +119,13 @@ type Draft_Corporation {
   roles: [Draft_Role!]!
 }
 
-union Draft_Creator = Draft_Person | Draft_Corporation
+interface Draft_Creator {
+  \\"\\"\\"Name of the creator\\"\\"\\"
+  display: String!
+
+  \\"\\"\\"Name of the creator which can be used to sort after \\"\\"\\"
+  nameSort: String!
+}
 
 type Draft_TableOfContent {
   heading: String
@@ -571,7 +577,7 @@ type Draft_Manifestation {
   source: String!
 
   \\"\\"\\"Subjects for this manifestation\\"\\"\\"
-  subjects: [Draft_Subject!]!
+  subjects: Draft_SubjectContainer!
 
   \\"\\"\\"
   Information about on which volume this manifestation is in multi volume work
@@ -742,7 +748,7 @@ type Draft_Work {
   universe: Draft_Universe
 
   \\"\\"\\"Subjects for this work\\"\\"\\"
-  subjects: [Draft_Subject!]!
+  subjects: Draft_SubjectContainer!
 
   \\"\\"\\"The genre, (literary) form, type etc. of this work\\"\\"\\"
   genreAndForm: [String!]!
@@ -820,15 +826,18 @@ type Draft_SeriesContainer {
   popular: [Draft_PopularSeries!]!
 }
 
-union Draft_Subject = Draft_SubjectText | Draft_Corporation | Draft_Person | Draft_TimePeriod
+interface Draft_Subject {
+  display: String!
+}
 
-type Draft_SubjectText {
+type Draft_SubjectText implements Draft_Subject {
   type: Draft_SubjectType!
   display: String!
 }
 
-type Draft_TimePeriod {
+type Draft_TimePeriod implements Draft_Subject {
   period: Draft_Range!
+  display: String!
 }
 
 enum Draft_SubjectType {
@@ -840,6 +849,14 @@ type Draft_Range {
   begin: Int
   end: Int
   display: String!
+}
+
+type Draft_SubjectContainer {
+  \\"\\"\\"All subjects\\"\\"\\"
+  all: [Draft_Subject!]!
+
+  \\"\\"\\"Only DBC verified subjects\\"\\"\\"
+  dbcVerified: [Draft_Subject!]!
 }
 
 type Draft_Language {
