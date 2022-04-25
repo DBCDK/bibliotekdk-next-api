@@ -89,7 +89,7 @@ type Draft_Work {
   """
   Subjects for this work
   """
-  subjects: [Draft_Subject!]!
+  subjects: Draft_SubjectContainer!
 
   """
   The genre, (literary) form, type etc. of this work
@@ -239,19 +239,36 @@ const FAKE_CORPORATION = {
   roles: [],
 };
 
-const FAKE_SUBJECTS = [
-  {
-    __typename: "Draft_SubjectText",
-    type: "DBC_FICTION",
-    display: "Some fictional subject",
-  },
-  {
-    __typename: "Draft_TimePeriod",
-    period: { begin: 1950, end: 1980, display: "1950-1980" },
-  },
-  FAKE_PERSON,
-  FAKE_CORPORATION,
-];
+const FAKE_SUBJECTS = {
+  all: [
+    {
+      __typename: "Draft_SubjectText",
+      type: "DBC_FICTION",
+      display: "Some fictional subject",
+    },
+    {
+      __typename: "Draft_TimePeriod",
+      display: "1950-1980",
+      period: { begin: 1950, end: 1980, display: "1950-1980" },
+    },
+    FAKE_PERSON,
+    FAKE_CORPORATION,
+  ],
+  dbcVerified: [
+    {
+      __typename: "Draft_SubjectText",
+      type: "DBC_FICTION",
+      display: "Some fictional subject",
+    },
+    {
+      __typename: "Draft_TimePeriod",
+      display: "1950-1980",
+      period: { begin: 1950, end: 1980, display: "1950-1980" },
+    },
+    FAKE_PERSON,
+    FAKE_CORPORATION,
+  ],
+};
 
 const FAKE_MANIFESTATION_1 = {
   pid: "some-pid-1",

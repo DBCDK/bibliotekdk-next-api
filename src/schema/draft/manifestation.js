@@ -561,7 +561,7 @@ type Draft_Manifestation {
   """
   Subjects for this manifestation
   """
-  subjects: [Draft_Subject!]!
+  subjects: Draft_SubjectContainer!
 
   """
   Information about on which volume this manifestation is in multi volume work

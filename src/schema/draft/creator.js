@@ -22,7 +22,7 @@ type Draft_Role {
   function: Draft_Translation!
 
 }
-type Draft_Person {
+type Draft_Person implements Draft_Subject {
   """
   The person's whole name in normal order
   """
@@ -68,7 +68,7 @@ type Draft_Person {
   """
   roles: [Draft_Role!]!
 }
-type Draft_Corporation {
+type Draft_Corporation implements Draft_Subject {
     """
     The full corporation or conference name
     """
