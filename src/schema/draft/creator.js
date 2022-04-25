@@ -22,7 +22,7 @@ type Draft_Role {
   function: Draft_Translation!
 
 }
-type Draft_Person implements Draft_Subject {
+type Draft_Person implements Draft_Subject & Draft_Creator {
   """
   The person's whole name in normal order
   """
@@ -68,7 +68,7 @@ type Draft_Person implements Draft_Subject {
   """
   roles: [Draft_Role!]!
 }
-type Draft_Corporation implements Draft_Subject {
+type Draft_Corporation implements Draft_Subject & Draft_Creator {
     """
     The full corporation or conference name
     """
@@ -114,7 +114,17 @@ type Draft_Corporation implements Draft_Subject {
     """
     roles: [Draft_Role!]!
 }
-union Draft_Creator = Draft_Person | Draft_Corporation
+interface Draft_Creator {
+  """
+  Name of the creator
+  """
+  display: String!
+
+  """
+  Name of the creator which can be used to sort after 
+  """
+  nameSort: String!
+}
 `;
 
 export const resolvers = {};
