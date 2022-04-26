@@ -377,7 +377,9 @@ type Draft_Printing {
 
 type Draft_PublicationYear {
   display: String!
-  number: Int
+  year: Int
+  endYear: Int
+  frequency: String
 }
 
 type Draft_Edition {
@@ -574,7 +576,7 @@ type Draft_Manifestation {
   \\"\\"\\"
   The source of the manifestation, e.g. own library catalogue (Bibliotekskatalog) or online source e.g. Filmstriben, Ebook Central, eReolen Global etc.
   \\"\\"\\"
-  source: String!
+  source: [String!]!
 
   \\"\\"\\"Subjects for this manifestation\\"\\"\\"
   subjects: Draft_SubjectContainer!
@@ -676,6 +678,22 @@ type Draft_Query {
   works(id: [String!], faust: [String!], pid: [String!]): [Draft_Work]!
   manifestation(faust: String, pid: String): Draft_Manifestation
   manifestations(faust: [String!], pid: [String!]): [Draft_Manifestation]!
+  suggest(
+    \\"\\"\\"The query to get suggestions from\\"\\"\\"
+    q: String!
+
+    \\"\\"\\"
+    work type to include in the result
+    Note: Is only supported in the bibdk suggester
+    \\"\\"\\"
+    workType: WorkType
+
+    \\"\\"\\"suggest type to include in result\\"\\"\\"
+    suggestType: Draft_SuggestionType
+  ): Draft_SuggestResponse!
+
+  \\"\\"\\"Get recommendations based on a pid\\"\\"\\"
+  recommend(pid: String!): Draft_RecommendationResponse!
 }
 
 type Query {
@@ -688,6 +706,18 @@ type Query {
   infomediaContent(pid: String!): [InfomediaContent]
   refWorks(pid: String!): String!
   ris(pid: String!): String!
+}
+
+type Draft_Recommendation {
+  \\"\\"\\"The recommended work\\"\\"\\"
+  work: Draft_Work!
+
+  \\"\\"\\"The recommended manifestation\\"\\"\\"
+  manifestation: Draft_Manifestation!
+}
+
+type Draft_RecommendationResponse {
+  result: [Draft_Recommendation!]!
 }
 
 union Draft_Review = Draft_ExternalReview | Draft_InfomediaReview | Draft_LibrariansReview
@@ -844,8 +874,15 @@ type Draft_TimePeriod implements Draft_Subject {
 }
 
 enum Draft_SubjectType {
-  \\"\\"\\"More to come\\"\\"\\"
-  DBC_FICTION
+  TOPIC
+  LOCATION
+  FICTIONAL_CHARACTER
+  MUSIC_COUNTRY_OF_ORIGIN
+  MUSIC_TIME_PERIOD
+  MUSICAL_INSTRUMENTATION
+  TIME_PERIOD
+  FILM_NATIONALITY
+  LIBRARY_OF_CONGRESS_SUBJECT_HEADING
 }
 
 type Draft_Range {
@@ -860,6 +897,27 @@ type Draft_SubjectContainer {
 
   \\"\\"\\"Only DBC verified subjects\\"\\"\\"
   dbcVerified: [Draft_Subject!]!
+}
+
+enum Draft_SuggestionType {
+  subject
+  title
+  creator
+}
+
+type Draft_Suggestion {
+  \\"\\"\\"The type of suggestion: creator, subject or title\\"\\"\\"
+  type: Draft_SuggestionType!
+
+  \\"\\"\\"The suggested term which can be searched for\\"\\"\\"
+  term: String!
+
+  \\"\\"\\"A work related to the term\\"\\"\\"
+  work: Draft_Work!
+}
+
+type Draft_SuggestResponse {
+  result: [Draft_Suggestion!]!
 }
 
 type Draft_Language {

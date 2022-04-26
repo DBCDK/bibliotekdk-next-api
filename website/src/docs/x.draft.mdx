@@ -5,9 +5,10 @@ to the draft are prefixed with `Draft_`. When the draft is approved, the prefix 
 
 For the time being, expect fake data to be returned.
 
+## Work
+
 <InlineGraphiQL
   query={`query ($id: String!) {
-  
   draft {
     work(id: $id) {
       workId
@@ -84,6 +85,7 @@ For the time being, expect fake data to be returned.
           numberInSeries {
             display
             number
+            
           }
           readThisFirst
           readThisWhenever
@@ -102,12 +104,7 @@ For the time being, expect fake data to be returned.
           ... on Draft_SubjectText {
             type
           }
-          ... on Draft_TimePeriod {
-            period {
-              begin
-              end
-            }
-          }
+         
         }
         dbcVerified {
           display
@@ -124,212 +121,7 @@ For the time being, expect fake data to be returned.
         first {
           pid
           titles {
-            main
-            full
-            sort
-            alternative
-            identifyingAddition
-            original
-            parallel
-            standard
-            translated
-          }
-          abstract
-          accessTypes
-          access {
-            __typename
-            ... on Draft_URL {
-              origin
-              url
-            }
-            ... on Draft_Ereol {
-              origin
-              url
-              canAlwaysBeLoaned
-            }
-            ... on Draft_Ill {
-              ill
-            }
-            ... on Draft_InfomediaService {
-              id
-            }
-            ... on Draft_DigitalArticleService {
-              issn
-            }
-          }
-          audience {
-            generalAudience
-            ages {
-              display
-            }
-            libraryRecommendation
-            childrenOrAdults
-            schoolUse
-            primaryTarget
-            let
-            lix
-          }
-          contributors {
-            __typename
-            ... on Draft_Person {
-              display
-            }
-            ... on Draft_Corporation {
-              display
-            }
-          }
-          contributorsFromDescription
-          creators {
-            __typename
-          }
-          creatorsFromDescription
-          classifications {
-            code
-            display
-            entryType
-            system
-          }
-          edition {
-            summary
-            edition
-            contributors
-            publicationYear {
-              display
-              number
-            }
-          }
-          latestPrinting {
-            summary
-            printing
-            publicationYear {
-              display
-              number
-            }
-          }
-          fictionNonfiction {
-            display
-            code
-          }
-          genreAndForm
-          hostPublication {
-            title
-            creator
-            issn
-            isbn
-            issue
-            notes
-            pages
-            publisher
-            series {
-              title
-            }
-            summary
-          }
-          identifiers {
-            type
-            value
-          }
-          languages {
-            main {
-              display
-              isoCode
-            }
-            original {
-              display
-            }
-            parallel {
-              display
-            }
-            spoken {
-              display
-            }
-            subtitles {
-              display
-            }
-            abstract {
-              display
-            }
-          }
-          manifestationParts {
-            heading
-            parts {
-              title
-              creators {
-                ... on Draft_Person {
-                  display
-                }
-              }
-              classifications {
-                display
-              }
-              subjects {
-                ... on Draft_SubjectText {
-                  display
-                }
-              }
-            }
-            type
-          }
-          materialTypes {
-            general
-            specific
-          }
-          notes {
-            type
-            heading
-            display
-          }
-          relatedPublications {
-            heading
-            title
-            issn
-            isbn
-            urlText
-            url
-          }
-          physicalDescriptions {
-            summary
-            accompanyingMaterial
-            additionalDescription
-            extent
-            numberOfPages
-            numberOfUnits
-            playingTime
-            requirements
-            size
-            technicalInformation
-            textVsIllustrations
-          }
-          publicationYear {
-            display
-            year
-            endYear
-            frequency
-          }
-          publisher
-          recordCreationDate
-          series {
-            all {
-              title
-            }
-          }
-          shelfmark {
-            prefix
-            shelfmark
-          }
-          subjects {
-            __typename
-          }
-          source
-          volume
-          tableOfContents {
-            heading
-            listOfContent {
-              heading
-              listOfContent {
-                heading
-              }
-            }
+            main          
           }
         }
         latest {
@@ -344,5 +136,272 @@ For the time being, expect fake data to be returned.
 }`}
   variables={{
     id: "some-work-id",
+  }}
+/>
+
+## Manifestation
+
+<InlineGraphiQL
+  query={`query ($pid: String!) {
+  draft {
+    manifestation(pid: $pid) {
+      pid
+      titles {
+        main
+        full
+        sort
+        alternative
+        identifyingAddition
+        original
+        parallel
+        standard
+        translated
+      }
+      abstract
+      accessTypes
+      access {
+        __typename
+        ... on Draft_URL {
+          origin
+          url
+        }
+        ... on Draft_Ereol {
+          origin
+          url
+          canAlwaysBeLoaned
+        }
+        ... on Draft_Ill {
+          ill
+        }
+        ... on Draft_InfomediaService {
+          id
+        }
+        ... on Draft_DigitalArticleService {
+          issn
+        }
+      }
+      audience {
+        generalAudience
+        ages {
+          display
+        }
+        libraryRecommendation
+        childrenOrAdults
+        schoolUse
+        primaryTarget
+        let
+        lix
+      }
+      contributors {
+        __typename
+        ... on Draft_Person {
+          display
+        }
+        ... on Draft_Corporation {
+          display
+        }
+      }
+      contributorsFromDescription
+      creators {
+        __typename
+      }
+      creatorsFromDescription
+      classifications {
+        code
+        display
+        entryType
+        system
+      }
+      edition {
+        summary
+        edition
+        contributors
+        publicationYear {
+          display
+          year
+        }
+      }
+      latestPrinting {
+        summary
+        printing
+        publicationYear {
+          display
+          year
+        }
+      }
+      fictionNonfiction {
+        display
+        code
+      }
+      genreAndForm
+      hostPublication {
+        title
+        creator
+        issn
+        isbn
+        issue
+        notes
+        pages
+        publisher
+        series {
+          title
+        }
+        summary
+      }
+      identifiers {
+        type
+        value
+      }
+      languages {
+        main {
+          display
+          isoCode
+        }
+        original {
+          display
+        }
+        parallel {
+          display
+        }
+        spoken {
+          display
+        }
+        subtitles {
+          display
+        }
+        abstract {
+          display
+        }
+      }
+      manifestationParts {
+        heading
+        parts {
+          title
+          creators {
+            ... on Draft_Person {
+              display
+            }
+          }
+          classifications {
+            display
+          }
+          subjects {
+            ... on Draft_SubjectText {
+              display
+            }
+          }
+        }
+        type
+      }
+      materialTypes {
+        general
+        specific
+      }
+      notes {
+        type
+        heading
+        display
+      }
+      relatedPublications {
+        heading
+        title
+        issn
+        isbn
+        urlText
+        url
+      }
+      physicalDescriptions {
+        summary
+        accompanyingMaterial
+        additionalDescription
+        extent
+        numberOfPages
+        numberOfUnits
+        playingTime
+        requirements
+        size
+        technicalInformation
+        textVsIllustrations
+      }
+      publicationYear {
+        display
+        year
+        endYear
+        frequency
+      }
+      publisher
+      recordCreationDate
+      series {
+        all {
+          title
+        }
+      }
+      shelfmark {
+        prefix
+        shelfmark
+      }
+      subjects {
+        __typename
+      }
+      source
+      volume
+      tableOfContents {
+        heading
+        listOfContent {
+          heading
+          listOfContent {
+            heading
+          }
+        }
+      }
+    }
+  }
+}`}
+  variables={{
+    pid: "some-pid",
+  }}
+/>
+
+## Suggestions
+
+<InlineGraphiQL
+  query={`query ($q: String!) {
+      draft {
+        suggest(q: $q) {
+          result {
+            type
+            term
+            work {
+              titles {
+                main
+              }
+            }
+          }
+        }
+      }
+    }`}
+  variables={{
+    q: "Harry",
+  }}
+/>
+
+## Recommendations
+
+<InlineGraphiQL
+  query={`query ($pid: String!) {
+      draft {
+        recommend(pid: $pid) {
+          result {
+            work {
+              titles {
+                main
+              }
+            }
+          }
+        }
+      }
+    }`}
+  variables={{
+    pid: "some-pid",
   }}
 />

@@ -312,7 +312,9 @@ type Draft_Printing {
 }
 type Draft_PublicationYear {
   display: String!
-  number: Int
+  year: Int
+  endYear: Int
+  frequency: String
 }
 type Draft_Edition {
   """
@@ -556,7 +558,7 @@ type Draft_Manifestation {
   """
   The source of the manifestation, e.g. own library catalogue (Bibliotekskatalog) or online source e.g. Filmstriben, Ebook Central, eReolen Global etc.
   """
-  source: String!
+  source: [String!]!
 
   """
   Subjects for this manifestation

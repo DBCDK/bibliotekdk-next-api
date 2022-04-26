@@ -4,6 +4,28 @@ type Draft_Query {
   works(id: [String!], faust: [String!], pid: [String!]): [Draft_Work]!
   manifestation(faust: String, pid: String): Draft_Manifestation
   manifestations(faust: [String!], pid: [String!]): [Draft_Manifestation]!
+  suggest(
+    """
+    The query to get suggestions from
+    """
+    q: String!, 
+
+    """
+    work type to include in the result
+    Note: Is only supported in the bibdk suggester
+    """
+    workType: WorkType, 
+
+    """
+    suggest type to include in result
+    """
+    suggestType: Draft_SuggestionType
+  ): Draft_SuggestResponse!
+
+  """
+  Get recommendations based on a pid
+  """
+  recommend(pid: String!): Draft_RecommendationResponse!
 }
 extend type Query {
   draft: Draft_Query!
@@ -83,7 +105,7 @@ const FAKE_SUBJECTS = {
   all: [
     {
       __typename: "Draft_SubjectText",
-      type: "DBC_FICTION",
+      type: "TOPIC",
       display: "Some fictional subject",
     },
     {
@@ -97,7 +119,7 @@ const FAKE_SUBJECTS = {
   dbcVerified: [
     {
       __typename: "Draft_SubjectText",
-      type: "DBC_FICTION",
+      type: "TOPIC",
       display: "Some fictional subject",
     },
     {
@@ -191,7 +213,7 @@ const FAKE_MANIFESTATION_1 = {
     contributors: [],
     publicationYear: {
       display: "2005",
-      number: 2005,
+      year: 2005,
     },
   },
   latestPrinting: {
@@ -199,7 +221,7 @@ const FAKE_MANIFESTATION_1 = {
     printing: "11. oplag",
     publicationYear: {
       display: "2020",
-      number: 2020,
+      year: 2020,
     },
   },
   fictionNonfiction: { display: "skønlitteratur", code: "fiction" },
@@ -216,7 +238,7 @@ const FAKE_MANIFESTATION_1 = {
     issn: "1395-7961",
     year: {
       display: "2006",
-      number: 2006,
+      year: 2006,
     },
     series: FAKE_GENERAL_SERIES,
   },
@@ -301,7 +323,7 @@ const FAKE_MANIFESTATION_1 = {
     prefix: "some prefix",
     shelfmark: "some shelfmark",
   },
-  source: "some source",
+  source: ["some source"],
   subjects: FAKE_SUBJECTS,
   volume: "Bind 2",
   tableOfContents: {
@@ -357,6 +379,20 @@ const FAKE_WORK = {
   },
 };
 
+const FAKE_SUGGEST_RESPONSE = {
+  result: [
+    { type: "title", term: "Some Title", work: FAKE_WORK },
+    { type: "creator", term: "Some Creator", work: FAKE_WORK },
+  ],
+};
+
+const FAKE_RECOMMEND_RESPONSE = {
+  result: [
+    { work: FAKE_WORK, manifestation: FAKE_MANIFESTATION_1 },
+    { work: FAKE_WORK, manifestation: FAKE_MANIFESTATION_1 },
+  ],
+};
+
 export const resolvers = {
   Query: {
     draft() {
@@ -383,6 +419,12 @@ export const resolvers = {
       return Array(count)
         .fill(0)
         .map(() => FAKE_MANIFESTATION_1);
+    },
+    suggest() {
+      return FAKE_SUGGEST_RESPONSE;
+    },
+    recommend() {
+      return FAKE_RECOMMEND_RESPONSE;
     },
   },
 };

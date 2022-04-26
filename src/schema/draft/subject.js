@@ -11,10 +11,15 @@ type Draft_TimePeriod implements Draft_Subject {
   display: String!
 }
 enum Draft_SubjectType {
-  """
-  More to come
-  """
-  DBC_FICTION
+  TOPIC
+  LOCATION
+  FICTIONAL_CHARACTER
+  MUSIC_COUNTRY_OF_ORIGIN
+  MUSIC_TIME_PERIOD
+  MUSICAL_INSTRUMENTATION
+  TIME_PERIOD
+  FILM_NATIONALITY
+  LIBRARY_OF_CONGRESS_SUBJECT_HEADING
 }
 type Draft_Range {
   begin: Int
