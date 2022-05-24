@@ -45,7 +45,7 @@ export const resolvers = {
 
       if (data && data.series) {
         const works = await Promise.all(
-          data.series.map(async (id) => {
+          data.series.slice(0, 100).map(async (id) => {
             return (
               await context.datasources.workservice.load({
                 workId: id,
