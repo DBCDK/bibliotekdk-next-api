@@ -14,8 +14,8 @@ export const trackMe = () => {
       if (!this.trackObject[name]) {
         this.trackObject[name] = { count: 0, time: 0 };
       }
-      this.trackObject[name].count = count;
-      this.trackObject[name].time = this.trackObject[name].time + time;
+      this.trackObject[name].count += count;
+      this.trackObject[name].time += time;
     },
     uuid: null,
     trackObject: {},
@@ -132,16 +132,16 @@ function createWrapLoader(loader) {
 
 const withTrackLoader = (batchloader, name, track) => {
   // Return the wrapped function
-  return async function (...args) {
+  return async function (keys) {
     // Start time
     const start = new Date().getTime();
     try {
-      return await batchloader(...args);
+      return await batchloader(keys, track);
     } finally {
       // end time
-      const numberOfCalls = { ...args };
+
       // a datasource is called once for each argument in list
-      const count = numberOfCalls[0].length;
+      const count = keys.length;
       const end = new Date().getTime();
       track.track(name, end - start, count);
     }
