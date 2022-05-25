@@ -163,6 +163,7 @@ export default function createDataLoaders(uuid) {
           // to make it useful as a cache key
           cacheKeyFn: (key) =>
             typeof key === "object" ? JSON.stringify(key) : key,
+          maxBatchSize: 100,
         }
       )
     );
