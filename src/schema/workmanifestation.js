@@ -124,17 +124,18 @@ export const resolvers = {
         parent.id
       );
 
-      // For articles and maybe other stuff we have a date here .. pjo 20/6 this one
-      // is no good - details is usually a string eg. "2000, nr. 1" - outcommented for now
-      /*let date = getArray(manifestation, "details.hostPublication.details").map(
+      // For articles and maybe other stuff we have a date here
+      let date = getArray(manifestation, "details.hostPublication.details").map(
         (entry) => entry.$
       )[0];
-      if (date && dayjs(date).isValid()) {
+      // simple check - does date start with 4 digits (a year) ?
+      const regex = /^\d{4}/;
+      if (date && dayjs(date).isValid() && date.match(regex)) {
         return { date, ...args };
-      }*/
+      }
 
       // Date could be here as well
-      let date = getArray(manifestation, "details.articleData.article.year").map(
+      date = getArray(manifestation, "details.articleData.article.year").map(
         (entry) => entry.$
       )[0];
       if (date && dayjs(date).isValid()) {
