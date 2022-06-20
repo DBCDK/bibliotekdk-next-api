@@ -133,7 +133,7 @@ export const resolvers = {
       }
 
       // Date could be here as well
-      date = getArray(manifestation, "details.articleData.article.volume").map(
+      date = getArray(manifestation, "details.articleData.article.year").map(
         (entry) => entry.$
       )[0];
       if (date && dayjs(date).isValid()) {
