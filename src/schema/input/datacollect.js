@@ -54,5 +54,11 @@ export const typeDef = `
     suggest_presented: DataCollectSuggestPresentedInput
     suggest_click: DataCollectSuggestClickInput
     example: DataCollectExampleInput
+    search_feedback: DataCollectSearchFeedBackInput
+  }
+  input DataCollectSearchFeedBackInput{
+    thumbs: String!
+    query: String!,
+    reason: String
   }
 `;
