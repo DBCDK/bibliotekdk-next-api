@@ -372,6 +372,7 @@ export function load(pid) {
         creationDate: {
           $: "2016-07-09",
         },
+        pid: { $: "800010-katalog:99121962154805763__1" },
       },
       details: {
         abstract: {
@@ -570,6 +571,7 @@ export function load(pid) {
         creationDate: {
           $: "2016-07-09",
         },
+        pid: { $: "300101-katalog:28486006" },
       },
       details: {
         abstract: {
@@ -796,6 +798,7 @@ export function load(pid) {
         creationDate: {
           $: "2016-07-09",
         },
+        pid: { $: "870970-basis:29433909" },
       },
       details: {
         abstract: {
