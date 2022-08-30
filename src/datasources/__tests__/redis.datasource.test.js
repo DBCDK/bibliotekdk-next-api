@@ -24,7 +24,7 @@ async function testWithRedis({
   const setexArgs = [];
 
   // call withRedis with spy functions
-  const enhancedBatchFunc = await withRedis(
+  const enhancedBatchFunc = withRedis(
     (keys) => {
       batchFunctionArgs = keys;
       return batchReturn;

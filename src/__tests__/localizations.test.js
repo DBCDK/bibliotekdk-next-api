@@ -26,7 +26,5 @@ test("localizations - get for a number of pids", async () => {
     context: { datasources: createMockedDataLoaders() },
   });
 
-  console.log(result, "RESULT");
-
   expect(result).toMatchSnapshot();
 });
