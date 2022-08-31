@@ -48,5 +48,5 @@ export async function load({ pids }) {
       ohs: "http://oss.dbc.dk/ns/openholdingstatus",
     },
   };
-  return parseResponse(response);
+  return parseResponse(JSON.stringify(response));
 }

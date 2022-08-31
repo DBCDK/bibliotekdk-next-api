@@ -6,33 +6,41 @@ Object {
     "work": Object {
       "materialTypes": Array [
         Object {
-          "localizations": null,
+          "localizations": Object {
+            "agencies": Array [
+              Object {
+                "agencyId": "800022",
+                "holdingItems": Array [
+                  Object {
+                    "codes": "",
+                    "localIdentifier": "99121992748605763",
+                    "localizationPid": "870971-avis:34591016",
+                  },
+                ],
+              },
+            ],
+            "count": 1,
+          },
         },
         Object {
-          "localizations": null,
-        },
-        Object {
-          "localizations": null,
-        },
-        Object {
-          "localizations": null,
-        },
-        Object {
-          "localizations": null,
-        },
-        Object {
-          "localizations": null,
+          "localizations": Object {
+            "agencies": Array [
+              Object {
+                "agencyId": "800022",
+                "holdingItems": Array [
+                  Object {
+                    "codes": "",
+                    "localIdentifier": "99121992748605763",
+                    "localizationPid": "870971-avis:34591016",
+                  },
+                ],
+              },
+            ],
+            "count": 1,
+          },
         },
       ],
     },
   },
-  "errors": Array [
-    [GraphQLError: Cannot read property 'admindata' of undefined],
-    [GraphQLError: Cannot read property 'admindata' of undefined],
-    [GraphQLError: Cannot read property 'admindata' of undefined],
-    [GraphQLError: Cannot read property 'admindata' of undefined],
-    [GraphQLError: Cannot read property 'admindata' of undefined],
-    [GraphQLError: Cannot read property 'admindata' of undefined],
-  ],
 }
 `;
