@@ -17,6 +17,7 @@ function constructSoap(pids) {
         <ns1:agencyId>DK-870970</ns1:agencyId>
         ${soappids}
         <ns1:outputType>json</ns1:outputType>
+        <ns1:role>bibdk</ns1:role>
         <ns1:mergePids>true</ns1:mergePids>
     </ns1:localisationsRequest>
   </SOAP-ENV:Body></SOAP-ENV:Envelope>`;
