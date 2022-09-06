@@ -224,7 +224,7 @@ export async function resolveOnlineAccess(pid, context) {
   // Get onlineAccess from openformat (UrlReferences)
   const manifestation = await context.datasources.openformat.load(pid);
 
-  const userIsLoggedIn = context.smaug.user.uniqueId;
+  const userIsLoggedIn = context.smaug?.user?.uniqueId;
   const data = getArray(manifestation, "details.onlineAccess");
   data.forEach((entry) => {
     if (entry.value) {
@@ -236,7 +236,7 @@ export async function resolveOnlineAccess(pid, context) {
       // hold url
       const tmpUrl = setRealUrl(
         (entry.value.link && entry.value.link.$) || "",
-        context.smaug.user
+        context.smaug?.user
       );
 
       // this one is for ebook central
