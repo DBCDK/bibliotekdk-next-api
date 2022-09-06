@@ -187,19 +187,71 @@ export async function resolveBorrowerCheck(agencyId, context) {
   return false;
 }
 
+/**
+ * municipality number is the second|third|fourth digit in agencyId
+ * @param agencyId
+ * @returns {string | undefined}
+ */
+function parseForMunicipalityNumber(agencyId) {
+  //return "376";
+  return agencyId?.substring(1, 4);
+}
+/**
+ * This one is for ebook.plus - we need to go via a proxy url (if user is logged in)
+ * @param url
+ * @param user
+ * @returns {*}
+ */
+function setRealUrl(url, user) {
+  const proxyurl = "https://bib<kommunenummer>.bibbaser.dk/login?url=";
+  if (url.indexOf("ebookcentral") !== -1) {
+    // check if user is logged in
+    if (user.uniqueId) {
+      const realUrl = proxyurl.replace(
+        "<kommunenummer>",
+        parseForMunicipalityNumber(user.agency)
+      );
+
+      return realUrl + url;
+    }
+  }
+  return url;
+}
+
 export async function resolveOnlineAccess(pid, context) {
   const result = [];
 
   // Get onlineAccess from openformat (UrlReferences)
   const manifestation = await context.datasources.openformat.load(pid);
 
+  const userIsLoggedIn = context.smaug.user.uniqueId;
   const data = getArray(manifestation, "details.onlineAccess");
   data.forEach((entry) => {
     if (entry.value) {
+      // hold origin
+      const tmpOrigin = getBaseUrl(
+        (entry.value.link && entry.value.link.$) || ""
+      );
+
+      // hold url
+      const tmpUrl = setRealUrl(
+        (entry.value.link && entry.value.link.$) || "",
+        context.smaug.user
+      );
+
+      // this one is for ebook central
+      const tmpAccessType =
+        entry.value.link &&
+        entry.value.link.$ &&
+        !userIsLoggedIn &&
+        entry.value.link.$.indexOf("ebookcentral") !== -1
+          ? "urlInternetRestricted"
+          : (entry.accessUrlDisplay && entry.accessUrlDisplay.$) || "";
       result.push({
-        url: (entry.value.link && entry.value.link.$) || "",
+        url: tmpUrl,
         note: (entry.value.note && entry.value.note.$) || "",
-        accessType: (entry.accessUrlDisplay && entry.accessUrlDisplay.$) || "",
+        accessType: tmpAccessType,
+        origin: tmpOrigin,
       });
     }
   });

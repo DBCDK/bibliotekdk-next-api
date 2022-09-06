@@ -36,15 +36,12 @@ export const typeDef = `
  `;
 
 /**
- * Resolvers for the Review type
+ * Resolvers for online access
  */
 export const resolvers = {
   UrlReference: {
     url(parent, args, context, info) {
       return parent.url;
-    },
-    origin(parent, args, context, info) {
-      return getBaseUrl(parent.url);
     },
     async note(parent, args, context, info) {
       return parent.note;
