@@ -1214,6 +1214,9 @@ input SearchQuery {
   \\"\\"\\"Search for creator\\"\\"\\"
   creator: String
 
+  \\"\\"\\"Search for creator\\"\\"\\"
+  creator_exact: String
+
   \\"\\"\\"Search for specific subject\\"\\"\\"
   subject: String
 

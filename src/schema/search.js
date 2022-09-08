@@ -29,6 +29,11 @@ input SearchQuery {
   creator: String
 
   """
+  Search for creator
+  """
+  creator_exact: String
+
+  """
   Search for specific subject
   """
   subject: String

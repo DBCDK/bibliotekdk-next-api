@@ -29,11 +29,11 @@ export const resolvers = {
     },
     parseValue(value) {
       // gets invoked to parse client input that was passed through variables.
-      return inRange(value, 1, 100);
+      return inRange(value, 1, 1000);
     },
     parseLiteral(ast) {
       // gets invoked to parse client input that was passed inline in the query.
-      return inRange(ast.value, 1, 100);
+      return inRange(ast.value, 1, 1000);
     },
   }),
   CustomDateFormat: new GraphQLScalarType({
