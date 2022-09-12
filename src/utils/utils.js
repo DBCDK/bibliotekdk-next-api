@@ -196,6 +196,7 @@ function parseForMunicipalityNumber(agencyId) {
   //return "376";
   return agencyId?.substring(1, 4);
 }
+
 /**
  * This one is for ebook.plus - we need to go via a proxy url (if user is logged in)
  * @param url
@@ -244,7 +245,8 @@ export async function resolveOnlineAccess(pid, context) {
         entry.value.link &&
         entry.value.link.$ &&
         !userIsLoggedIn &&
-        entry.value.link.$.indexOf("ebookcentral") !== -1
+        (entry.value.link.$.indexOf("ebookcentral") !== -1 ||
+          entry.value.link.$.indexOf("ebscohost") !== -1)
           ? "urlInternetRestricted"
           : (entry.accessUrlDisplay && entry.accessUrlDisplay.$) || "";
       result.push({
