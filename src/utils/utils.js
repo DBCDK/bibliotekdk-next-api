@@ -193,7 +193,7 @@ export async function resolveBorrowerCheck(agencyId, context) {
  * @returns {string | undefined}
  */
 function parseForMunicipalityNumber(agencyId) {
-  //return "376";
+  //return "000";
   return agencyId?.substring(1, 4);
 }
 
@@ -205,14 +205,13 @@ function parseForMunicipalityNumber(agencyId) {
  */
 function setRealUrl(url, user) {
   const proxyurl = "https://bib<kommunenummer>.bibbaser.dk/login?url=";
-  if (url.indexOf("ebookcentral") !== -1) {
+  if (url.indexOf("ebookcentral") !== -1 || url.indexOf("ebscohost") !== -1) {
     // check if user is logged in
     if (user.uniqueId) {
       const realUrl = proxyurl.replace(
         "<kommunenummer>",
         parseForMunicipalityNumber(user.agency)
       );
-
       return realUrl + url;
     }
   }
@@ -224,8 +223,9 @@ export async function resolveOnlineAccess(pid, context) {
 
   // Get onlineAccess from openformat (UrlReferences)
   const manifestation = await context.datasources.openformat.load(pid);
-
+  // is user logged in
   const userIsLoggedIn = context.smaug?.user?.uniqueId;
+
   const data = getArray(manifestation, "details.onlineAccess");
   data.forEach((entry) => {
     if (entry.value) {
@@ -239,7 +239,6 @@ export async function resolveOnlineAccess(pid, context) {
         (entry.value.link && entry.value.link.$) || "",
         context.smaug?.user
       );
-
       // this one is for ebook central
       const tmpAccessType =
         entry.value.link &&
