@@ -13,6 +13,7 @@ type User {
   postalCode: String
   mail: String
   culrMail: String
+  municipalityAgencyId: String
   agency(language: LanguageCode): BranchResult!
   orders: [Order!]!
   loans: [Loan!]!
@@ -105,6 +106,7 @@ export const resolvers = {
       const resUserInfo = await context.datasources.userinfo.load({
         accessToken: context.accessToken,
       });
+
       const agencyWithEmail =
         resUserInfo.attributes &&
         resUserInfo.attributes.agencies &&
@@ -114,6 +116,19 @@ export const resolvers = {
 
       return agencyWithEmail && agencyWithEmail.userId;
     },
+
+    async municipalityAgencyId(parent, args, context, info) {
+      const resUserInfo = await context.datasources.userinfo.load({
+        accessToken: context.accessToken,
+      });
+
+      const municcipalityAgencyId =
+        resUserInfo?.attributes &&
+        resUserInfo?.attributes?.municipalityAgencyId;
+
+      return municcipalityAgencyId || null;
+    },
+
     async agency(parent, args, context, info) {
       const res = await context.datasources.user.load({
         accessToken: context.accessToken,
