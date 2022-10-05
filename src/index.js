@@ -19,6 +19,32 @@ import createDataLoaders from "./datasourceLoader";
 import { uuid } from "uuidv4";
 import isbot from "isbot";
 
+import { PerformanceObserver } from "perf_hooks";
+
+// Log dns and tcp connect durations
+const obs = new PerformanceObserver((list) => {
+  list.getEntries().forEach((entry) => {
+    if (entry.duration > 500) {
+      if (entry.name === "lookup") {
+        log.info("DNS_DIAGNOSTICS", {
+          diagnostics: {
+            hostname: entry.detail.hostname,
+            total: entry.duration,
+          },
+        });
+      } else if (entry.name === "connect") {
+        log.info("CONNECT_DIAGNOSTICS", {
+          diagnostics: {
+            host: entry.detail.host,
+            total: entry.duration,
+          },
+        });
+      }
+    }
+  });
+});
+obs.observe({ entryTypes: ["dns", "net"], buffered: true });
+
 const app = express();
 let server;
 
